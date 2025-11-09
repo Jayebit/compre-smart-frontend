@@ -68,7 +68,7 @@
       .main-content {
         flex: 1;
         padding: 20px;
-        margin-left: 80px; /* match sidebar width */
+        margin-left: 80px;
         min-height: 100vh;
       }
 
@@ -536,202 +536,200 @@
       }
     </style>
     <style>
-  .cs-settings-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-  }
-  .cs-settings-modal {
-    background: #fff;
-    width: min(780px, 95vw);
-    max-height: 90vh;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
-    display: flex;
-    flex-direction: column;
-  }
-  .cs-settings-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 18px 8px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .cs-settings-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-  }
-  .cs-settings-close {
-    background: #e53e3e;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 9999px;
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .cs-settings-tabs {
-    display: flex;
-    gap: 6px;
-    padding: 10px 16px 0;
-  }
-  .cs-settings-tab {
-    border: none;
-    background: #eef2ff;
-    color: #4f46e5;
-    padding: 6px 12px;
-    border-radius: 9999px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .cs-settings-tab.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-  }
-  .cs-settings-body {
-    padding: 14px 16px 16px;
-    overflow-y: auto;
-    gap: 16px;
-    display: flex;
-    flex-direction: column;
-  }
-  .cs-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .cs-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #4b5563;
-  }
-  .cs-input, .cs-select, .cs-textarea {
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    padding: 8px 10px;
-    font-size: 14px;
-    font-family: inherit;
-  }
-  .cs-settings-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .cs-btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    color: #fff;
-    padding: 7px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  .cs-btn-danger {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-  }
-  .cs-pinned-subjects {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .cs-pin-pill {
-    border: 1px solid #e2e8f0;
-    padding: 5px 10px;
-    border-radius: 9999px;
-    font-size: 12px;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    cursor: pointer;
-    background: #fff;
-  }
-  .cs-pin-pill.active {
-    background: #eef2ff;
-    border-color: #c7d2fe;
-  }
-  .cs-settings-hint {
-    font-size: 12px;
-    color: #94a3b8;
-  }
-  .cs-toggle-line {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .cs-switch {
-    width: 40px;
-    height: 22px;
-    background: #e2e8f0;
-    border-radius: 9999px;
-    position: relative;
-    cursor: pointer;
-  }
-  .cs-switch-handle {
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border-radius: 9999px;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    transition: all 0.2s;
-  }
-  .cs-switch.on {
-    background: #667eea;
-  }
-  .cs-switch.on .cs-switch-handle {
-    left: 20px;
-  }
-  body.cs-dark {
-    background: #0f172a;
-  }
-</style>
-
+      .cs-settings-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+      }
+      .cs-settings-modal {
+        background: #fff;
+        width: min(780px, 95vw);
+        max-height: 90vh;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+        display: flex;
+        flex-direction: column;
+      }
+      .cs-settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px 8px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .cs-settings-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .cs-settings-close {
+        background: #e53e3e;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 9999px;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .cs-settings-tabs {
+        display: flex;
+        gap: 6px;
+        padding: 10px 16px 0;
+      }
+      .cs-settings-tab {
+        border: none;
+        background: #eef2ff;
+        color: #4f46e5;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .cs-settings-tab.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+      }
+      .cs-settings-body {
+        padding: 14px 16px 16px;
+        overflow-y: auto;
+        gap: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .cs-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .cs-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #4b5563;
+      }
+      .cs-input,
+      .cs-select,
+      .cs-textarea {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      .cs-settings-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .cs-btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: #fff;
+        padding: 7px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .cs-btn-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .cs-pinned-subjects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .cs-pin-pill {
+        border: 1px solid #e2e8f0;
+        padding: 5px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        cursor: pointer;
+        background: #fff;
+      }
+      .cs-pin-pill.active {
+        background: #eef2ff;
+        border-color: #c7d2fe;
+      }
+      .cs-settings-hint {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+      .cs-toggle-line {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .cs-switch {
+        width: 40px;
+        height: 22px;
+        background: #e2e8f0;
+        border-radius: 9999px;
+        position: relative;
+        cursor: pointer;
+      }
+      .cs-switch-handle {
+        width: 18px;
+        height: 18px;
+        background: #fff;
+        border-radius: 9999px;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: all 0.2s;
+      }
+      .cs-switch.on {
+        background: #667eea;
+      }
+      .cs-switch.on .cs-switch-handle {
+        left: 20px;
+      }
+      body.cs-dark {
+        background: #0f172a;
+      }
+    </style>
   </head>
   <body>
     <div class="app-container">
-     
-     <!-- sidebar (same in index.html and questions.html) -->
-<aside class="sidebar">
-  <button class="sidebar-item" id="navDashboard" title="Dashboard">📊</button>
-  <button class="sidebar-item" id="navReflections" title="Reflections">💭</button>
-  <button class="sidebar-item" id="navQuestions" title="Questions">❓</button>
-  <button class="sidebar-item" id="navSettings" title="Settings">⚙️</button>
-</aside>
-
-
+      <aside class="sidebar">
+        <button class="sidebar-item" id="navDashboard" title="Dashboard">📊</button>
+        <button class="sidebar-item" id="navReflections" title="Reflections">💭</button>
+        <button class="sidebar-item" id="navQuestions" title="Questions">❓</button>
+        <button class="sidebar-item" id="navSettings" title="Settings">⚙️</button>
+      </aside>
 
       <main class="main-content">
         <div class="container">
           <!-- header -->
           <div class="header">
-  <div class="logo">
-    <div class="logo-icon">📚</div>
-    <div class="app-name" id="appName">CompreSmart</div>
-  </div>
-  <div class="profile-area">
-    <img id="csAvatar" src=""
-         alt="avatar"
-         style="width:34px;height:34px;border-radius:9999px;object-fit:cover;display:none;border:2px solid #edf2f7;">
-    <div class="student-name" id="studentName">Student</div>
-    <button class="logout-btn" id="logoutBtn">Logout</button>
-  </div>
-</div>  <!-- ✅ close the header -->
-
-
+            <div class="logo">
+              <div class="logo-icon">📚</div>
+              <div class="app-name" id="appName">CompreSmart</div>
+            </div>
+            <div class="profile-area">
+              <img
+                id="csAvatar"
+                src=""
+                alt="avatar"
+                style="width:34px;height:34px;border-radius:9999px;object-fit:cover;display:none;border:2px solid #edf2f7;"
+              />
+              <div class="student-name" id="studentName">Student</div>
+              <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+          </div>
 
           <!-- progress -->
           <div class="progress-card">
@@ -763,11 +761,7 @@
                 <span class="toggle-icon expanded" id="toggle-sem1">▼</span>
               </div>
               <div class="subjects-list expanded" id="subjects-sem1">
-                <!-- you can add/remove subjects as needed -->
-                <div
-                  class="subject-card"
-                  data-subject="Understanding the Self"
-                >
+                <div class="subject-card" data-subject="Understanding the Self">
                   <div class="subject-header">
                     <div class="subject-name">Understanding the Self</div>
                     <button
@@ -869,14 +863,9 @@
                   />
                 </div>
 
-                <div
-                  class="subject-card"
-                  data-subject="The Life and Works of Rizal"
-                >
+                <div class="subject-card" data-subject="The Life and Works of Rizal">
                   <div class="subject-header">
-                    <div class="subject-name">
-                      The Life and Works of Rizal
-                    </div>
+                    <div class="subject-name">The Life and Works of Rizal</div>
                     <button
                       class="add-reflection-btn"
                       onclick="openReflectionModal('rizal','The Life and Works of Rizal'); event.stopPropagation();"
@@ -909,10 +898,7 @@
                 <span class="toggle-icon expanded" id="toggle-sem2">▼</span>
               </div>
               <div class="subjects-list expanded" id="subjects-sem2">
-                <div
-                  class="subject-card"
-                  data-subject="Purposive Communication"
-                >
+                <div class="subject-card" data-subject="Purposive Communication">
                   <div class="subject-header">
                     <div class="subject-name">Purposive Communication</div>
                     <button
@@ -986,10 +972,7 @@
                   />
                 </div>
 
-                <div
-                  class="subject-card"
-                  data-subject="The Contemporary World"
-                >
+                <div class="subject-card" data-subject="The Contemporary World">
                   <div class="subject-header">
                     <div class="subject-name">The Contemporary World</div>
                     <button
@@ -1069,27 +1052,25 @@
       </div>
     </div>
 
-    <!-- scripts -->
+    <!-- main scripts -->
     <script>
-      // ----------------------------
+      // === backend base (Render) ===
+      const API_BASE = "https://compre-smart-backend.onrender.com";
+
       // LOGIN CHECK
-      // ----------------------------
-     const user = localStorage.getItem("cs_user");
-if (!user) {
-  window.location.href = "login.html";
-} else {
-  document.getElementById("studentName").textContent = user;
-
-  // load per-user settings to get avatar
-  const settingsKey = "cs_settings_" + user;
-  const st = JSON.parse(localStorage.getItem(settingsKey) || "{}");
-  if (st.avatar) {
-    const av = document.getElementById("csAvatar");
-    av.src = st.avatar;
-    av.style.display = "block";
-  }
-}
-
+      const user = localStorage.getItem("cs_user");
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("studentName").textContent = user;
+        const settingsKey = "cs_settings_" + user;
+        const st = JSON.parse(localStorage.getItem(settingsKey) || "{}");
+        if (st.avatar) {
+          const av = document.getElementById("csAvatar");
+          av.src = st.avatar;
+          av.style.display = "block";
+        }
+      }
 
       // logout
       document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -1124,9 +1105,7 @@ if (!user) {
         }
       }
 
-      // ----------------------------
-      // REFLECTIONS (localStorage)
-      // ----------------------------
+      // REFLECTIONS local
       function getReflections() {
         return JSON.parse(localStorage.getItem("cs_reflections") || "[]");
       }
@@ -1239,9 +1218,7 @@ if (!user) {
         updateReflectionCount();
       });
 
-      // ----------------------------
       // SUBJECT PROGRESS
-      // ----------------------------
       function getProgressMap() {
         return JSON.parse(localStorage.getItem("cs_progress") || "{}");
       }
@@ -1264,14 +1241,12 @@ if (!user) {
           text.textContent = value + "% Complete";
           slider.value = value;
 
-          // clicking card toggles slider
           card.addEventListener("click", (e) => {
             if (e.target.closest(".add-reflection-btn")) return;
             if (e.target.textContent === "Resources") return;
             card.classList.toggle("show-slider");
           });
 
-          // slider change
           slider.addEventListener("input", () => {
             const v = Number(slider.value);
             bar.style.width = v + "%";
@@ -1307,31 +1282,31 @@ if (!user) {
 
     <!-- RESOURCES LOGIC -->
     <script>
-  const currentUser = localStorage.getItem("cs_user");
+      const currentUser = localStorage.getItem("cs_user");
 
-  document.addEventListener("DOMContentLoaded", () => {
-    // add Resources button to each subject
-    document.querySelectorAll(".subject-card").forEach((card) => {
-      const titleEl = card.querySelector(".subject-name");
-      if (!titleEl) return;
-      const subjectName = titleEl.textContent.trim();
+      document.addEventListener("DOMContentLoaded", () => {
+        // add Resources button to each subject
+        document.querySelectorAll(".subject-card").forEach((card) => {
+          const titleEl = card.querySelector(".subject-name");
+          if (!titleEl) return;
+          const subjectName = titleEl.textContent.trim();
 
-      const btn = document.createElement("button");
-      btn.textContent = "Resources";
-      btn.className = "add-reflection-btn";
-      btn.style.marginLeft = "10px";
-      btn.addEventListener("click", () => openResourcesModal(subjectName));
-      card.querySelector(".subject-header").appendChild(btn);
-    });
-  });
+          const btn = document.createElement("button");
+          btn.textContent = "Resources";
+          btn.className = "add-reflection-btn";
+          btn.style.marginLeft = "10px";
+          btn.addEventListener("click", () => openResourcesModal(subjectName));
+          card.querySelector(".subject-header").appendChild(btn);
+        });
+      });
 
-  function ensureResourcesModal() {
-    if (document.getElementById("cs-resources-modal")) return;
+      function ensureResourcesModal() {
+        if (document.getElementById("cs-resources-modal")) return;
 
-    const wrap = document.createElement("div");
-    wrap.id = "cs-resources-modal";
-    wrap.className = "cs-modal-backdrop";
-    wrap.innerHTML = `
+        const wrap = document.createElement("div");
+        wrap.id = "cs-resources-modal";
+        wrap.className = "cs-modal-backdrop";
+        wrap.innerHTML = `
       <div class="cs-modal" id="cs-modal-inner">
         <div class="cs-modal-header">
           <div>
@@ -1371,53 +1346,50 @@ if (!user) {
         </div>
       </div>
     `;
-    document.body.appendChild(wrap);
+        document.body.appendChild(wrap);
 
-    // close ONLY on the X button
-    document.getElementById("cs-modal-close").addEventListener("click", () => {
-      wrap.style.display = "none";
-    });
-
-    // IMPORTANT: we do NOT close when clicking backdrop anymore
-    // wrap.addEventListener("click", ...)  <-- removed
-  }
-
-  // load + render notes
-  async function loadNotes(subjectName) {
-    const notesBox = document.getElementById("cs-notes-list");
-    const onlyMineCheckbox = document.getElementById("cs-only-mine");
-    notesBox.innerHTML = "Loading notes...";
-
-    let notes = [];
-    try {
-      const res = await fetch(
-        `http://localhost:3000/notes?subject=${encodeURIComponent(subjectName)}`
-      );
-      notes = await res.json();
-    } catch (err) {
-      console.error(err);
-      notesBox.innerHTML = "<p>Could not load notes.</p>";
-      return;
-    }
-
-    const render = (allNotes) => {
-      const onlyMine = onlyMineCheckbox && onlyMineCheckbox.checked;
-      const finalNotes =
-        onlyMine && currentUser
-          ? allNotes.filter((n) => n.author === currentUser)
-          : allNotes;
-
-      if (!finalNotes.length) {
-        notesBox.innerHTML =
-          "<p style='font-size:13px;color:#94a3b8;'>No notes yet.</p>";
-        return;
+        document.getElementById("cs-modal-close").addEventListener("click", () => {
+          wrap.style.display = "none";
+        });
       }
 
-      notesBox.innerHTML = finalNotes
-        .map((n) => {
-          const canDelete =
-            currentUser && (currentUser === n.author || currentUser === "admin");
-          return `
+      // load + render notes
+      async function loadNotes(subjectName) {
+        const notesBox = document.getElementById("cs-notes-list");
+        const onlyMineCheckbox = document.getElementById("cs-only-mine");
+        notesBox.innerHTML = "Loading notes...";
+
+        let notes = [];
+        try {
+          const res = await fetch(
+            `${API_BASE}/notes?subject=${encodeURIComponent(subjectName)}`
+          );
+          notes = await res.json();
+        } catch (err) {
+          console.error(err);
+          notesBox.innerHTML = "<p>Could not load notes.</p>";
+          return;
+        }
+
+        const render = (allNotes) => {
+          const onlyMine = onlyMineCheckbox && onlyMineCheckbox.checked;
+          const finalNotes =
+            onlyMine && currentUser
+              ? allNotes.filter((n) => n.author === currentUser)
+              : allNotes;
+
+          if (!finalNotes.length) {
+            notesBox.innerHTML =
+              "<p style='font-size:13px;color:#94a3b8;'>No notes yet.</p>";
+            return;
+          }
+
+          notesBox.innerHTML = finalNotes
+            .map((n) => {
+              const canDelete =
+                currentUser &&
+                (currentUser === n.author || currentUser === "admin");
+              return `
             <div class="cs-note-item">
               <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
                 <div>${n.content}</div>
@@ -1453,88 +1425,90 @@ if (!user) {
               </div>
             </div>
           `;
-        })
-        .join("");
+            })
+            .join("");
 
-      // comment handlers
-      if (currentUser) {
-        document.querySelectorAll(".cs-comment-input").forEach((inp) => {
-          inp.addEventListener("keydown", async (e) => {
-            if (e.key === "Enter") {
-              const noteId = inp.getAttribute("data-note");
-              const content = inp.value.trim();
-              if (!content) return;
-              await fetch(`http://localhost:3000/notes/${noteId}/comments`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  author: currentUser,
-                  content,
-                }),
+          // comment handlers
+          if (currentUser) {
+            document.querySelectorAll(".cs-comment-input").forEach((inp) => {
+              inp.addEventListener("keydown", async (e) => {
+                if (e.key === "Enter") {
+                  const noteId = inp.getAttribute("data-note");
+                  const content = inp.value.trim();
+                  if (!content) return;
+                  await fetch(`${API_BASE}/notes/${noteId}/comments`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      author: currentUser,
+                      content,
+                    }),
+                  });
+                  loadNotes(subjectName);
+                }
               });
-              // just refresh notes, keep modal
-              loadNotes(subjectName);
-            }
-          });
-        });
-
-        // delete handlers
-        document.querySelectorAll("[data-del-note]").forEach((btn) => {
-          btn.addEventListener("click", async (e) => {
-            e.stopPropagation(); // extra safety
-            const id = btn.getAttribute("data-del-note");
-            await fetch(`http://localhost:3000/notes/${id}`, {
-              method: "DELETE",
             });
-            // just refresh notes, keep modal
-            loadNotes(subjectName);
-          });
-        });
+
+            // delete handlers
+            document.querySelectorAll("[data-del-note]").forEach((btn) => {
+              btn.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute("data-del-note");
+                await fetch(`${API_BASE}/notes/${id}`, {
+                  method: "DELETE",
+                });
+                loadNotes(subjectName);
+              });
+            });
+          }
+
+          if (onlyMineCheckbox) {
+            onlyMineCheckbox.onchange = () => render(notes);
+          }
+        };
+
+        render(notes);
       }
 
-      // filter
-      if (onlyMineCheckbox) {
-        onlyMineCheckbox.onchange = () => render(notes);
-      }
-    };
+      // load + render files
+      async function loadFiles(subjectName) {
+        const filesBox = document.getElementById("cs-files-list");
+        filesBox.innerHTML = "Loading files...";
+        let files = [];
+        try {
+          const resF = await fetch(
+            `${API_BASE}/files?subject=${encodeURIComponent(subjectName)}`
+          );
+          files = await resF.json();
+        } catch (err) {
+          console.error(err);
+          filesBox.innerHTML = "<p>Could not load files.</p>";
+          return;
+        }
 
-    render(notes);
-  }
+        if (!files.length) {
+          filesBox.innerHTML =
+            "<p style='font-size:13px;color:#94a3b8;'>No files yet.</p>";
+          return;
+        }
 
-  // load + render files
-  async function loadFiles(subjectName) {
-    const filesBox = document.getElementById("cs-files-list");
-    filesBox.innerHTML = "Loading files...";
-    let files = [];
-    try {
-      const resF = await fetch(
-        `http://localhost:3000/files?subject=${encodeURIComponent(subjectName)}`
-      );
-      files = await resF.json();
-    } catch (err) {
-      console.error(err);
-      filesBox.innerHTML = "<p>Could not load files.</p>";
-      return;
-    }
-
-    if (!files.length) {
-      filesBox.innerHTML =
-        "<p style='font-size:13px;color:#94a3b8;'>No files yet.</p>";
-      return;
-    }
-
-    filesBox.innerHTML = files
-      .map((f) => {
-        const canDelete =
-          currentUser && (currentUser === f.uploader || currentUser === "admin");
-        return `
+        filesBox.innerHTML = files
+          .map((f) => {
+            const canDelete =
+              currentUser &&
+              (currentUser === f.uploader || currentUser === "admin");
+            return `
           <div class="cs-file-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <div>
-              <a href="http://localhost:3000${f.filePath}" target="_blank">${f.originalName}</a>
-              <div style="font-size:11px;color:#94a3b8;">Uploaded by ${f.uploader || "Unknown"}</div>
+              <a href="${API_BASE}${f.filePath}" target="_blank">${f.originalName}</a>
+              <div style="font-size:11px;color:#94a3b8;">Uploaded by ${
+                f.uploader || "Unknown"
+              }</div>
             </div>
             <div>
-              <span class="cs-badge">${new Date(f.uploadedAt).toLocaleDateString()}</span>
+              <span class="cs-badge">${new Date(
+                f.uploadedAt
+              ).toLocaleDateString()}</span>
               ${
                 canDelete
                   ? `<button data-del-file="${f.id}" style="background:none;border:none;color:#e11d48;cursor:pointer;font-size:14px;">🗑</button>`
@@ -1543,162 +1517,148 @@ if (!user) {
             </div>
           </div>
         `;
-      })
-      .join("");
+          })
+          .join("");
 
-    // delete file handlers
-    document.querySelectorAll("[data-del-file]").forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        e.stopPropagation(); // extra safety
-        const id = btn.getAttribute("data-del-file");
-        await fetch(
-          `http://localhost:3000/files/${id}?user=${encodeURIComponent(
-            currentUser || ""
-          )}`,
-          { method: "DELETE" }
-        );
-        // just refresh files, keep modal
+        document.querySelectorAll("[data-del-file]").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute("data-del-file");
+            await fetch(
+              `${API_BASE}/files/${id}?user=${encodeURIComponent(
+                currentUser || ""
+              )}`,
+              { method: "DELETE" }
+            );
+            loadFiles(subjectName);
+          });
+        });
+      }
+
+      async function openResourcesModal(subjectName) {
+        ensureResourcesModal();
+        const modal = document.getElementById("cs-resources-modal");
+        modal.style.display = "flex";
+        document.getElementById("cs-modal-subject").textContent = subjectName;
+
+        document.getElementById("cs-note-hint").style.display = currentUser
+          ? "none"
+          : "block";
+        document.getElementById("cs-file-hint").style.display = currentUser
+          ? "none"
+          : "block";
+
+        loadNotes(subjectName);
         loadFiles(subjectName);
-      });
-    });
-  }
 
-  async function openResourcesModal(subjectName) {
-    ensureResourcesModal();
-    const modal = document.getElementById("cs-resources-modal");
-    modal.style.display = "flex";
-    document.getElementById("cs-modal-subject").textContent = subjectName;
+        document.getElementById("cs-save-note").onclick = async () => {
+          if (!currentUser) return;
+          const content = document.getElementById("cs-new-note").value.trim();
+          const isPublic = document.getElementById("cs-note-public").checked;
+          if (!content) return;
+          await fetch(`${API_BASE}/notes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              subject: subjectName,
+              author: currentUser,
+              content,
+              isPublic,
+            }),
+          });
+          document.getElementById("cs-new-note").value = "";
+          loadNotes(subjectName);
+        };
 
-    // hints
-    document.getElementById("cs-note-hint").style.display = currentUser
-      ? "none"
-      : "block";
-    document.getElementById("cs-file-hint").style.display = currentUser
-      ? "none"
-      : "block";
+        document.getElementById("cs-upload-form").onsubmit = async (e) => {
+          e.preventDefault();
+          if (!currentUser) return;
+          const fileInput = document.getElementById("cs-file-input");
+          if (!fileInput.files[0]) return;
 
-    // load lists
-    loadNotes(subjectName);
-    loadFiles(subjectName);
+          const fd = new FormData();
+          fd.append("subject", subjectName);
+          fd.append("file", fileInput.files[0]);
+          fd.append("uploader", currentUser);
 
-    // post note
-    document.getElementById("cs-save-note").onclick = async () => {
-      if (!currentUser) return;
-      const content = document.getElementById("cs-new-note").value.trim();
-      const isPublic = document.getElementById("cs-note-public").checked;
-      if (!content) return;
-      await fetch("http://localhost:3000/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subject: subjectName,
-          author: currentUser,
-          content,
-          isPublic,
-        }),
-      });
-      document.getElementById("cs-new-note").value = "";
-      // just refresh notes
-      loadNotes(subjectName);
-    };
+          await fetch(`${API_BASE}/upload`, {
+            method: "POST",
+            body: fd,
+          });
 
-    // upload file
-    document.getElementById("cs-upload-form").onsubmit = async (e) => {
-      e.preventDefault();
-      if (!currentUser) return;
-      const fileInput = document.getElementById("cs-file-input");
-      if (!fileInput.files[0]) return;
+          fileInput.value = "";
+          loadFiles(subjectName);
+        };
+      }
+    </script>
 
-      const fd = new FormData();
-      fd.append("subject", subjectName);
-      fd.append("file", fileInput.files[0]);
-      fd.append("uploader", currentUser);
-
-      await fetch("http://localhost:3000/upload", {
-        method: "POST",
-        body: fd,
-      });
-
-      fileInput.value = "";
-      // just refresh files
-      loadFiles(subjectName);
-    };
-  }
-</script>
-
-
-
-
-
-<div class="cs-settings-backdrop" id="cs-settings-backdrop">
-  <div class="cs-settings-modal">
-    <div class="cs-settings-header">
-      <div class="cs-settings-title">Settings</div>
-      <button class="cs-settings-close" id="cs-settings-close">×</button>
+    <!-- settings dialog -->
+    <div class="cs-settings-backdrop" id="cs-settings-backdrop">
+      <div class="cs-settings-modal">
+        <div class="cs-settings-header">
+          <div class="cs-settings-title">Settings</div>
+          <button class="cs-settings-close" id="cs-settings-close">×</button>
+        </div>
+        <div class="cs-settings-tabs">
+          <button class="cs-settings-tab active" data-tab="profile">Profile</button>
+          <button class="cs-settings-tab" data-tab="prefs">Preferences</button>
+          <button class="cs-settings-tab" data-tab="data">Data & Privacy</button>
+        </div>
+        <div class="cs-settings-body" id="cs-settings-body"></div>
+      </div>
     </div>
-    <div class="cs-settings-tabs">
-      <button class="cs-settings-tab active" data-tab="profile">Profile</button>
-      <button class="cs-settings-tab" data-tab="prefs">Preferences</button>
-      <button class="cs-settings-tab" data-tab="data">Data & Privacy</button>
-    </div>
-    <div class="cs-settings-body" id="cs-settings-body">
-      <!-- content injected by JS -->
-    </div>
-  </div>
-</div>
 
-<script>
-  // SETTINGS MODULE
-  const settingsBackdrop = document.getElementById("cs-settings-backdrop");
-  const settingsClose = document.getElementById("cs-settings-close");
-  const settingsBody = document.getElementById("cs-settings-body");
-  const settingsTabs = document.querySelectorAll(".cs-settings-tab");
-  const settingsBtn = document.querySelector('.sidebar button[title="Settings"]');
-  const currentUserName = localStorage.getItem("cs_user");
+    <script>
+      const settingsBackdrop = document.getElementById("cs-settings-backdrop");
+      const settingsClose = document.getElementById("cs-settings-close");
+      const settingsBody = document.getElementById("cs-settings-body");
+      const settingsTabs = document.querySelectorAll(".cs-settings-tab");
+      const settingsBtn = document.querySelector(
+        '.sidebar button[title="Settings"]'
+      );
+      const currentUserName = localStorage.getItem("cs_user");
 
-  // per-user settings key
-  function getSettingsKey() {
-    return "cs_settings_" + (currentUserName || "guest");
-  }
+      function getSettingsKey() {
+        return "cs_settings_" + (currentUserName || "guest");
+      }
 
-  function loadSettings() {
-    return JSON.parse(localStorage.getItem(getSettingsKey()) || "{}");
-  }
+      function loadSettings() {
+        return JSON.parse(localStorage.getItem(getSettingsKey()) || "{}");
+      }
 
-  function saveSettings(obj) {
-    localStorage.setItem(getSettingsKey(), JSON.stringify(obj));
-  }
+      function saveSettings(obj) {
+        localStorage.setItem(getSettingsKey(), JSON.stringify(obj));
+      }
 
-  function openSettings() {
-    settingsBackdrop.style.display = "flex";
-    renderSettingsTab("profile");
-  }
+      function openSettings() {
+        settingsBackdrop.style.display = "flex";
+        renderSettingsTab("profile");
+      }
 
-  function closeSettings() {
-    settingsBackdrop.style.display = "none";
-  }
+      function closeSettings() {
+        settingsBackdrop.style.display = "none";
+      }
 
-  if (settingsBtn) {
-    settingsBtn.addEventListener("click", openSettings);
-  }
-  settingsClose.addEventListener("click", closeSettings);
-  settingsBackdrop.addEventListener("click", (e) => {
-    if (e.target.id === "cs-settings-backdrop") closeSettings();
-  });
+      if (settingsBtn) {
+        settingsBtn.addEventListener("click", openSettings);
+      }
+      settingsClose.addEventListener("click", closeSettings);
+      settingsBackdrop.addEventListener("click", (e) => {
+        if (e.target.id === "cs-settings-backdrop") closeSettings();
+      });
 
-  // tab switching
-  settingsTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      settingsTabs.forEach((t) => t.classList.remove("active"));
-      tab.classList.add("active");
-      renderSettingsTab(tab.dataset.tab);
-    });
-  });
+      settingsTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          settingsTabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          renderSettingsTab(tab.dataset.tab);
+        });
+      });
 
-  function renderSettingsTab(tabName) {
-    const st = loadSettings();
-    if (tabName === "profile") {
-      settingsBody.innerHTML = `
+      function renderSettingsTab(tabName) {
+        const st = loadSettings();
+        if (tabName === "profile") {
+          settingsBody.innerHTML = `
         <div class="cs-field">
           <label class="cs-label">Display name</label>
           <input id="cs-prof-name" class="cs-input" value="${st.displayName || currentUserName || ""}" />
@@ -1717,49 +1677,51 @@ if (!user) {
         <button class="cs-btn-primary" id="cs-prof-save">Save profile</button>
       `;
 
-      document.getElementById("cs-prof-save").onclick = () => {
-        const newName = document.getElementById("cs-prof-name").value.trim();
-        const newBio = document.getElementById("cs-prof-bio").value.trim();
-        const s = loadSettings();
-        s.displayName = newName;
-        s.bio = newBio;
-        saveSettings(s);
-        // update header instantly
-        if (newName) {
-          const headerName = document.getElementById("studentName");
-          if (headerName) headerName.textContent = newName;
-        }
-        alert("Profile saved.");
-      };
+          document.getElementById("cs-prof-save").onclick = () => {
+            const newName = document.getElementById("cs-prof-name").value.trim();
+            const newBio = document.getElementById("cs-prof-bio").value.trim();
+            const s = loadSettings();
+            s.displayName = newName;
+            s.bio = newBio;
+            saveSettings(s);
+            if (newName) {
+              const headerName = document.getElementById("studentName");
+              if (headerName) headerName.textContent = newName;
+            }
+            alert("Profile saved.");
+          };
 
-      document.getElementById("cs-prof-save-pass").onclick = async () => {
-        const newPass = document.getElementById("cs-prof-pass").value.trim();
-        if (!newPass) return alert("Enter a password first.");
-        try {
-          await fetch("http://localhost:3000/change-password", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              username: currentUserName,
-              newPassword: newPass,
-            }),
-          });
-          alert("Password update requested. Check server logs.");
-          document.getElementById("cs-prof-pass").value = "";
-        } catch (e) {
-          console.error(e);
-          alert("Could not update password (check backend).");
-        }
-      };
+          document.getElementById("cs-prof-save-pass").onclick = async () => {
+            const newPass = document.getElementById("cs-prof-pass").value.trim();
+            if (!newPass) return alert("Enter a password first.");
+            try {
+              await fetch(`${API_BASE}/change-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  username: currentUserName,
+                  newPassword: newPass,
+                }),
+              });
+              alert("Password update requested. Check server logs.");
+              document.getElementById("cs-prof-pass").value = "";
+            } catch (e) {
+              console.error(e);
+              alert("Could not update password (check backend).");
+            }
+          };
+        } else if (tabName === "prefs") {
+          const subjectEls = Array.from(
+            document.querySelectorAll(".subject-card[data-subject]")
+          );
+          const allSubjects = subjectEls.map((el) =>
+            el.getAttribute("data-subject")
+          );
+          const pinned = st.pinnedSubjects || [];
+          const darkOn =
+            document.body.classList.contains("cs-dark") || st.darkMode;
 
-    } else if (tabName === "prefs") {
-      // collect subject names from DOM
-      const subjectEls = Array.from(document.querySelectorAll(".subject-card[data-subject]"));
-      const allSubjects = subjectEls.map((el) => el.getAttribute("data-subject"));
-      const pinned = st.pinnedSubjects || [];
-      const darkOn = document.body.classList.contains("cs-dark") || st.darkMode;
-
-      settingsBody.innerHTML = `
+          settingsBody.innerHTML = `
         <div class="cs-field">
           <label class="cs-label">Dark mode</label>
           <div class="cs-toggle-line">
@@ -1775,7 +1737,9 @@ if (!user) {
             ${allSubjects
               .map((sName) => {
                 const isPinned = pinned.includes(sName);
-                return `<button class="cs-pin-pill ${isPinned ? "active" : ""}" data-subj="${sName}">${isPinned ? "⭐" : "☆"} ${sName}</button>`;
+                return `<button class="cs-pin-pill ${
+                  isPinned ? "active" : ""
+                }" data-subj="${sName}">${isPinned ? "⭐" : "☆"} ${sName}</button>`;
               })
               .join("")}
           </div>
@@ -1795,39 +1759,35 @@ if (!user) {
         <button class="cs-btn-primary" id="cs-prefs-save">Save preferences</button>
       `;
 
-      // dark mode toggle
-      const darkSwitch = document.getElementById("cs-dark-switch");
-      darkSwitch.addEventListener("click", () => {
-        darkSwitch.classList.toggle("on");
-        const s = loadSettings();
-        const isOn = darkSwitch.classList.contains("on");
-        s.darkMode = isOn;
-        saveSettings(s);
-        document.body.classList.toggle("cs-dark", isOn);
-      });
+          const darkSwitch = document.getElementById("cs-dark-switch");
+          darkSwitch.addEventListener("click", () => {
+            darkSwitch.classList.toggle("on");
+            const s = loadSettings();
+            const isOn = darkSwitch.classList.contains("on");
+            s.darkMode = isOn;
+            saveSettings(s);
+            document.body.classList.toggle("cs-dark", isOn);
+          });
 
-      // pin subject toggles
-      document.querySelectorAll(".cs-pin-pill").forEach((pill) => {
-        pill.addEventListener("click", () => {
-          pill.classList.toggle("active");
-        });
-      });
+          document.querySelectorAll(".cs-pin-pill").forEach((pill) => {
+            pill.addEventListener("click", () => {
+              pill.classList.toggle("active");
+            });
+          });
 
-      document.getElementById("cs-prefs-save").onclick = () => {
-        const s = loadSettings();
-        const newPinned = Array.from(document.querySelectorAll(".cs-pin-pill.active")).map((p) =>
-          p.getAttribute("data-subj")
-        );
-        s.pinnedSubjects = newPinned;
-        s.reminderDay = document.getElementById("cs-reminder-day").value;
-        saveSettings(s);
-        // visually mark pinned on dashboard
-        markPinnedSubjects(newPinned);
-        alert("Preferences saved.");
-      };
-
-    } else if (tabName === "data") {
-      settingsBody.innerHTML = `
+          document.getElementById("cs-prefs-save").onclick = () => {
+            const s = loadSettings();
+            const newPinned = Array.from(
+              document.querySelectorAll(".cs-pin-pill.active")
+            ).map((p) => p.getAttribute("data-subj"));
+            s.pinnedSubjects = newPinned;
+            s.reminderDay = document.getElementById("cs-reminder-day").value;
+            saveSettings(s);
+            markPinnedSubjects(newPinned);
+            alert("Preferences saved.");
+          };
+        } else if (tabName === "data") {
+          settingsBody.innerHTML = `
         <div class="cs-field">
           <label class="cs-label">Export my data</label>
           <p class="cs-settings-hint">This will download your reflections, progress and settings as JSON.</p>
@@ -1845,82 +1805,93 @@ if (!user) {
         </div>
       `;
 
-      document.getElementById("cs-export-data").onclick = () => {
-        const exportObj = {
-          user: currentUserName,
-          reflections: JSON.parse(localStorage.getItem("cs_reflections") || "[]"),
-          progress: JSON.parse(localStorage.getItem("cs_progress") || "{}"),
-          settings: loadSettings(),
-        };
-        const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "compreSmart_backup.json";
-        link.click();
-      };
+          document.getElementById("cs-export-data").onclick = () => {
+            const exportObj = {
+              user: currentUserName,
+              reflections: JSON.parse(
+                localStorage.getItem("cs_reflections") || "[]"
+              ),
+              progress: JSON.parse(
+                localStorage.getItem("cs_progress") || "{}"
+              ),
+              settings: loadSettings(),
+            };
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], {
+              type: "application/json",
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "compreSmart_backup.json";
+            link.click();
+          };
 
-      document.getElementById("cs-reset-local").onclick = () => {
-        if (!confirm("Clear local reflections, progress and settings?")) return;
-        localStorage.removeItem("cs_reflections");
-        localStorage.removeItem("cs_progress");
-        localStorage.removeItem(getSettingsKey());
-        alert("Local data cleared. Reloading...");
-        location.reload();
-      };
+          document.getElementById("cs-reset-local").onclick = () => {
+            if (
+              !confirm("Clear local reflections, progress and settings?")
+            )
+              return;
+            localStorage.removeItem("cs_reflections");
+            localStorage.removeItem("cs_progress");
+            localStorage.removeItem(getSettingsKey());
+            alert("Local data cleared. Reloading...");
+            location.reload();
+          };
 
-      document.getElementById("cs-delete-account").onclick = async () => {
-        if (!confirm("This will try to delete your account on the server. Continue?")) return;
-        try {
-          await fetch("http://localhost:3000/delete-user", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: currentUserName }),
-          });
-          alert("Account deletion requested. Logging out.");
-          localStorage.removeItem("cs_user");
-          window.location.href = "login.html";
-        } catch (e) {
-          console.error(e);
-          alert("Could not contact server to delete. Check backend.");
+          document.getElementById("cs-delete-account").onclick = async () => {
+            if (
+              !confirm(
+                "This will try to delete your account on the server. Continue?"
+              )
+            )
+              return;
+            try {
+              await fetch(`${API_BASE}/delete-user`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: currentUserName }),
+              });
+              alert("Account deletion requested. Logging out.");
+              localStorage.removeItem("cs_user");
+              window.location.href = "login.html";
+            } catch (e) {
+              console.error(e);
+              alert("Could not contact server to delete. Check backend.");
+            }
+          };
         }
-      };
-    }
-  }
-
-  // highlight pinned subjects on dashboard
-  function markPinnedSubjects(pinnedList) {
-    document.querySelectorAll(".subject-card[data-subject]").forEach((card) => {
-      const name = card.getAttribute("data-subject");
-      if (pinnedList.includes(name)) {
-        card.style.border = "2px solid rgba(102,126,234,0.4)";
-        card.style.boxShadow = "0 4px 12px rgba(102,126,234,0.15)";
-      } else {
-        card.style.border = "1px solid #e2e8f0";
-        card.style.boxShadow = "none";
       }
-    });
-  }
 
-  // apply dark + pinned on load
-  document.addEventListener("DOMContentLoaded", () => {
-    const st = loadSettings();
-    if (st.darkMode) {
-      document.body.classList.add("cs-dark");
-    }
-    if (st.pinnedSubjects) {
-      markPinnedSubjects(st.pinnedSubjects);
-    }
-  });
+      function markPinnedSubjects(pinnedList) {
+        document
+          .querySelectorAll(".subject-card[data-subject]")
+          .forEach((card) => {
+            const name = card.getAttribute("data-subject");
+            if (pinnedList.includes(name)) {
+              card.style.border = "2px solid rgba(102,126,234,0.4)";
+              card.style.boxShadow = "0 4px 12px rgba(102,126,234,0.15)";
+            } else {
+              card.style.border = "1px solid #e2e8f0";
+              card.style.boxShadow = "none";
+            }
+          });
+      }
 
-// settings button – always go to settings.html
-const navSettings = document.getElementById("navSettings");
-if (navSettings) {
-  navSettings.addEventListener("click", () => {
-    window.location.href = "settings.html";
-  });
-}
+      document.addEventListener("DOMContentLoaded", () => {
+        const st = loadSettings();
+        if (st.darkMode) {
+          document.body.classList.add("cs-dark");
+        }
+        if (st.pinnedSubjects) {
+          markPinnedSubjects(st.pinnedSubjects);
+        }
+      });
 
-</script>
-
+      const navSettings = document.getElementById("navSettings");
+      if (navSettings) {
+        navSettings.addEventListener("click", () => {
+          window.location.href = "settings.html";
+        });
+      }
+    </script>
   </body>
 </html>

@@ -390,7 +390,7 @@
         const newPass = document.getElementById("set-password").value.trim();
         if (!newPass) return alert("Enter a password");
         try {
-          await fetch("http://localhost:3000/change-password", {
+          await fetch("https://compre-smart-backend.onrender.com//change-password", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: u, newPassword: newPass }),

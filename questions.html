@@ -404,413 +404,423 @@
     </div>
 
     <script>
-      // ===== login =====
-      const user = localStorage.getItem("cs_user");
-      const studentNameEl = document.getElementById("studentName");
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        studentNameEl.textContent = user;
-      }
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("cs_user");
-        window.location.href = "login.html";
+  // one place for backend url (even if we don't use it much here)
+  const API_BASE = "https://compre-smart-backend.onrender.com";
+
+  // ===== login =====
+  const user = localStorage.getItem("cs_user");
+  const studentNameEl = document.getElementById("studentName");
+  if (!user) {
+    window.location.href = "login.html";
+  } else {
+    studentNameEl.textContent = user;
+
+    // show avatar if user set it in settings (same trick as index.html)
+    const settingsKey = "cs_settings_" + user;
+    const st = JSON.parse(localStorage.getItem(settingsKey) || "{}");
+    if (st.avatar) {
+      const av = document.getElementById("csAvatar");
+      av.src = st.avatar;
+      av.style.display = "block";
+    }
+  }
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("cs_user");
+    window.location.href = "login.html";
+  });
+
+  // ===== tabs =====
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = {
+    add: document.getElementById("tab-add"),
+    answer: document.getElementById("tab-answer"),
+    grade: document.getElementById("tab-grade"),
+  };
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tabButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const target = btn.dataset.tab;
+      Object.keys(tabContents).forEach((k) => {
+        tabContents[k].style.display = k === target ? "block" : "none";
       });
+    });
+  });
 
-      // ===== tabs =====
-      const tabButtons = document.querySelectorAll(".tab-btn");
-      const tabContents = {
-        add: document.getElementById("tab-add"),
-        answer: document.getElementById("tab-answer"),
-        grade: document.getElementById("tab-grade"),
-      };
-      tabButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          tabButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          const target = btn.dataset.tab;
-          Object.keys(tabContents).forEach((k) => {
-            tabContents[k].style.display = k === target ? "block" : "none";
-          });
+  // ===== storage helpers =====
+  function getQuestions() {
+    return JSON.parse(localStorage.getItem("cs_questions") || "[]");
+  }
+  function saveQuestions(list) {
+    localStorage.setItem("cs_questions", JSON.stringify(list));
+  }
+  function getAnswers() {
+    return JSON.parse(localStorage.getItem("cs_answers") || "[]");
+  }
+  function saveAnswers(list) {
+    localStorage.setItem("cs_answers", JSON.stringify(list));
+  }
+  function getGrades() {
+    return JSON.parse(localStorage.getItem("cs_grades") || "[]");
+  }
+  function saveGrades(list) {
+    localStorage.setItem("cs_grades", JSON.stringify(list));
+  }
+
+  // ===== load subjects (local list, no backend) =====
+  const subjectSelect = document.getElementById("subjectSelect");
+  const answerSubjectSelect = document.getElementById("answerSubjectSelect");
+
+  function loadSubjects() {
+    // same subjects as in your dashboard
+    const data = {
+      firstSemester: [
+        "Understanding the Self",
+        "Readings in the Philippine History",
+        "Mathematics in the Modern World",
+        "Ethics",
+        "The Life and Works of Rizal",
+      ],
+      secondSemester: [
+        "Purposive Communication",
+        "Art Appreciation",
+        "Science, Technology and Society",
+        "The Contemporary World",
+      ],
+    };
+
+    // add options
+    subjectSelect.innerHTML = '<option value="">-- Select subject --</option>';
+    answerSubjectSelect.innerHTML = '<option value="">All subjects</option>';
+
+    data.firstSemester.forEach((s) => {
+      const opt1 = document.createElement("option");
+      opt1.value = s;
+      opt1.textContent = "1st Sem – " + s;
+      subjectSelect.appendChild(opt1);
+
+      const opt2 = document.createElement("option");
+      opt2.value = s;
+      opt2.textContent = "1st Sem – " + s;
+      answerSubjectSelect.appendChild(opt2);
+    });
+
+    data.secondSemester.forEach((s) => {
+      const opt1 = document.createElement("option");
+      opt1.value = s;
+      opt1.textContent = "2nd Sem – " + s;
+      subjectSelect.appendChild(opt1);
+
+      const opt2 = document.createElement("option");
+      opt2.value = s;
+      opt2.textContent = "2nd Sem – " + s;
+      answerSubjectSelect.appendChild(opt2);
+    });
+  }
+  loadSubjects();
+
+  // ===== render "Your questions" (tab add) =====
+  const questionsListEl = document.getElementById("questionsList");
+  function renderQuestionsList() {
+    const qs = getQuestions();
+    questionsListEl.innerHTML = "";
+    if (!qs.length) {
+      questionsListEl.innerHTML =
+        '<div class="empty-state">No questions yet.</div>';
+      return;
+    }
+    qs
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .forEach((q) => {
+        const item = document.createElement("div");
+        item.className = "question-item";
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const subj = document.createElement("span");
+        subj.className = "subject-tag";
+        subj.textContent = q.subject;
+
+        const del = document.createElement("button");
+        del.className = "delete-btn";
+        del.textContent = "🗑️";
+        del.addEventListener("click", () => {
+          const filtered = getQuestions().filter((x) => x.id !== q.id);
+          saveQuestions(filtered);
+          // also remove related answers
+          const newAns = getAnswers().filter((a) => a.questionId !== q.id);
+          saveAnswers(newAns);
+          renderQuestionsList();
+          renderAnswerQuestions();
+          renderAnswersToGrade();
         });
+
+        header.appendChild(subj);
+        header.appendChild(del);
+
+        const qtext = document.createElement("div");
+        qtext.textContent = q.text;
+        qtext.style.fontWeight = "600";
+        qtext.style.marginBottom = "6px";
+
+        item.appendChild(header);
+        item.appendChild(qtext);
+
+        if (q.suggested && q.suggested.trim() !== "") {
+          const ansLabel = document.createElement("div");
+          ansLabel.style.fontSize = "12px";
+          ansLabel.style.color = "#667eea";
+          ansLabel.style.marginBottom = "3px";
+          ansLabel.textContent = "Suggested answer";
+
+          const ansBlock = document.createElement("div");
+          ansBlock.className = "answer-block";
+          ansBlock.textContent = q.suggested;
+
+          item.appendChild(ansLabel);
+          item.appendChild(ansBlock);
+        }
+
+        const dateEl = document.createElement("div");
+        dateEl.className = "question-date";
+        dateEl.textContent =
+          "Added " +
+          new Date(q.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+        item.appendChild(dateEl);
+
+        questionsListEl.appendChild(item);
       });
+  }
 
-      // ===== storage helpers =====
-      function getQuestions() {
-        return JSON.parse(localStorage.getItem("cs_questions") || "[]");
-      }
-      function saveQuestions(list) {
-        localStorage.setItem("cs_questions", JSON.stringify(list));
-      }
-      function getAnswers() {
-        return JSON.parse(localStorage.getItem("cs_answers") || "[]");
-      }
-      function saveAnswers(list) {
-        localStorage.setItem("cs_answers", JSON.stringify(list));
-      }
-      function getGrades() {
-        return JSON.parse(localStorage.getItem("cs_grades") || "[]");
-      }
-      function saveGrades(list) {
-        localStorage.setItem("cs_grades", JSON.stringify(list));
-      }
+  // ===== submit question =====
+  const questionForm = document.getElementById("questionForm");
+  questionForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const subject = subjectSelect.value;
+    const qText = document.getElementById("questionText").value.trim();
+    const sAns = document.getElementById("suggestedAnswer").value.trim();
+    if (!subject || !qText) {
+      alert("Please select subject and write question.");
+      return;
+    }
+    const newQ = {
+      id: "q_" + Date.now(),
+      subject,
+      text: qText,
+      suggested: sAns,
+      createdAt: new Date().toISOString(),
+      createdBy: user,
+    };
+    const list = getQuestions();
+    list.unshift(newQ);
+    saveQuestions(list);
+    questionForm.reset();
+    renderQuestionsList();
+    renderAnswerQuestions();
+  });
 
-      // ===== load subjects from backend =====
-      const subjectSelect = document.getElementById("subjectSelect");
-      const answerSubjectSelect = document.getElementById("answerSubjectSelect");
+  // ===== tab: Answer Questions =====
+  const answerQuestionsListEl = document.getElementById("answerQuestionsList");
+  const answerFormContainer = document.getElementById("answerFormContainer");
+  const studentAnswerText = document.getElementById("studentAnswerText");
+  const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+  let selectedQuestionId = null;
 
-      async function loadSubjects() {
-        try {
-          const res = await fetch("http://localhost:3000/lessons");
-          const data = await res.json();
+  function renderAnswerQuestions() {
+    const qs = getQuestions();
+    answerQuestionsListEl.innerHTML = "";
+    selectedQuestionId = null;
+    answerFormContainer.style.display = "none";
+    if (!qs.length) {
+      answerQuestionsListEl.innerHTML =
+        '<div class="empty-state">No questions available.</div>';
+      return;
+    }
 
-          // for add
-          subjectSelect.innerHTML =
-            '<option value="">-- Select subject --</option>';
-          // for answer
-          answerSubjectSelect.innerHTML =
-            '<option value="">All subjects</option>';
+    const filterSubj = answerSubjectSelect.value;
+    const toRender = filterSubj ? qs.filter((q) => q.subject === filterSubj) : qs;
 
-          data.firstSemester.forEach((s) => {
-            const opt1 = document.createElement("option");
-            opt1.value = s;
-            opt1.textContent = "1st Sem – " + s;
-            subjectSelect.appendChild(opt1);
+    if (!toRender.length) {
+      answerQuestionsListEl.innerHTML =
+        '<div class="empty-state">No questions for that subject.</div>';
+      return;
+    }
 
-            const opt2 = document.createElement("option");
-            opt2.value = s;
-            opt2.textContent = "1st Sem – " + s;
-            answerSubjectSelect.appendChild(opt2);
-          });
+    toRender.forEach((q) => {
+      const item = document.createElement("div");
+      item.className = "question-item";
+      item.style.cursor = "pointer";
 
-          data.secondSemester.forEach((s) => {
-            const opt1 = document.createElement("option");
-            opt1.value = s;
-            opt1.textContent = "2nd Sem – " + s;
-            subjectSelect.appendChild(opt1);
+      const header = document.createElement("div");
+      header.className = "question-header";
 
-            const opt2 = document.createElement("option");
-            opt2.value = s;
-            opt2.textContent = "2nd Sem – " + s;
-            answerSubjectSelect.appendChild(opt2);
-          });
-        } catch (err) {
-          console.error("Could not load subjects:", err);
-        }
-      }
-      loadSubjects();
+      const subj = document.createElement("span");
+      subj.className = "subject-tag";
+      subj.textContent = q.subject;
 
-      // ===== render "Your questions" (tab add) =====
-      const questionsListEl = document.getElementById("questionsList");
-      function renderQuestionsList() {
-        const qs = getQuestions();
-        questionsListEl.innerHTML = "";
-        if (!qs.length) {
-          questionsListEl.innerHTML =
-            '<div class="empty-state">No questions yet.</div>';
-          return;
-        }
-        qs
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-          .forEach((q) => {
-            const item = document.createElement("div");
-            item.className = "question-item";
+      header.appendChild(subj);
 
-            const header = document.createElement("div");
-            header.className = "question-header";
+      const qtext = document.createElement("div");
+      qtext.textContent = q.text;
 
-            const subj = document.createElement("span");
-            subj.className = "subject-tag";
-            subj.textContent = q.subject;
+      item.appendChild(header);
+      item.appendChild(qtext);
 
-            const del = document.createElement("button");
-            del.className = "delete-btn";
-            del.textContent = "🗑️";
-            del.addEventListener("click", () => {
-              const filtered = getQuestions().filter((x) => x.id !== q.id);
-              saveQuestions(filtered);
-              // also remove related answers
-              const newAns = getAnswers().filter((a) => a.questionId !== q.id);
-              saveAnswers(newAns);
-              renderQuestionsList();
-              renderAnswerQuestions();
-              renderAnswersToGrade();
-            });
-
-            header.appendChild(subj);
-            header.appendChild(del);
-
-            const qtext = document.createElement("div");
-            qtext.textContent = q.text;
-            qtext.style.fontWeight = "600";
-            qtext.style.marginBottom = "6px";
-
-            item.appendChild(header);
-            item.appendChild(qtext);
-
-            if (q.suggested && q.suggested.trim() !== "") {
-              const ansLabel = document.createElement("div");
-              ansLabel.style.fontSize = "12px";
-              ansLabel.style.color = "#667eea";
-              ansLabel.style.marginBottom = "3px";
-              ansLabel.textContent = "Suggested answer";
-
-              const ansBlock = document.createElement("div");
-              ansBlock.className = "answer-block";
-              ansBlock.textContent = q.suggested;
-
-              item.appendChild(ansLabel);
-              item.appendChild(ansBlock);
-            }
-
-            const dateEl = document.createElement("div");
-            dateEl.className = "question-date";
-            dateEl.textContent =
-              "Added " +
-              new Date(q.createdAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              });
-            item.appendChild(dateEl);
-
-            questionsListEl.appendChild(item);
-          });
-      }
-
-      // ===== submit question =====
-      const questionForm = document.getElementById("questionForm");
-      questionForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const subject = subjectSelect.value;
-        const qText = document.getElementById("questionText").value.trim();
-        const sAns = document.getElementById("suggestedAnswer").value.trim();
-        if (!subject || !qText) {
-          alert("Please select subject and write question.");
-          return;
-        }
-        const newQ = {
-          id: "q_" + Date.now(),
-          subject,
-          text: qText,
-          suggested: sAns,
-          createdAt: new Date().toISOString(),
-          createdBy: user,
-        };
-        const list = getQuestions();
-        list.unshift(newQ);
-        saveQuestions(list);
-        questionForm.reset();
-        renderQuestionsList();
-        renderAnswerQuestions();
-      });
-
-      // ===== tab: Answer Questions =====
-      const answerQuestionsListEl = document.getElementById(
-        "answerQuestionsList"
-      );
-      const answerFormContainer = document.getElementById(
-        "answerFormContainer"
-      );
-      const studentAnswerText = document.getElementById("studentAnswerText");
-      const submitAnswerBtn = document.getElementById("submitAnswerBtn");
-      let selectedQuestionId = null;
-
-      function renderAnswerQuestions() {
-        const qs = getQuestions();
-        answerQuestionsListEl.innerHTML = "";
-        selectedQuestionId = null;
-        answerFormContainer.style.display = "none";
-        if (!qs.length) {
-          answerQuestionsListEl.innerHTML =
-            '<div class="empty-state">No questions available.</div>';
-          return;
-        }
-
-        const filterSubj = answerSubjectSelect.value;
-        const toRender = filterSubj
-          ? qs.filter((q) => q.subject === filterSubj)
-          : qs;
-
-        if (!toRender.length) {
-          answerQuestionsListEl.innerHTML =
-            '<div class="empty-state">No questions for that subject.</div>';
-          return;
-        }
-
-        toRender.forEach((q) => {
-          const item = document.createElement("div");
-          item.className = "question-item";
-          item.style.cursor = "pointer";
-
-          const header = document.createElement("div");
-          header.className = "question-header";
-
-          const subj = document.createElement("span");
-          subj.className = "subject-tag";
-          subj.textContent = q.subject;
-
-          header.appendChild(subj);
-
-          const qtext = document.createElement("div");
-          qtext.textContent = q.text;
-
-          item.appendChild(header);
-          item.appendChild(qtext);
-
-          item.addEventListener("click", () => {
-            selectedQuestionId = q.id;
-            answerFormContainer.style.display = "block";
-            studentAnswerText.value = "";
-          });
-
-          answerQuestionsListEl.appendChild(item);
-        });
-      }
-
-      answerSubjectSelect.addEventListener("change", renderAnswerQuestions);
-
-      submitAnswerBtn.addEventListener("click", () => {
-        if (!selectedQuestionId) return;
-        const ans = studentAnswerText.value.trim();
-        if (!ans) return;
-        const all = getAnswers();
-        all.unshift({
-          id: "a_" + Date.now(),
-          questionId: selectedQuestionId,
-          answerText: ans,
-          answeredBy: user,
-          createdAt: new Date().toISOString(),
-        });
-        saveAnswers(all);
+      item.addEventListener("click", () => {
+        selectedQuestionId = q.id;
+        answerFormContainer.style.display = "block";
         studentAnswerText.value = "";
-        answerFormContainer.style.display = "none";
-        renderAnswersToGrade();
-        alert("Answer submitted!");
       });
 
-      // ===== tab: Grade Answers =====
-      const answersToGradeEl = document.getElementById("answersToGrade");
+      answerQuestionsListEl.appendChild(item);
+    });
+  }
 
-      function renderAnswersToGrade() {
-        const answers = getAnswers();
-        const questions = getQuestions();
-        const grades = getGrades();
+  answerSubjectSelect.addEventListener("change", renderAnswerQuestions);
 
-        answersToGradeEl.innerHTML = "";
-        if (!answers.length) {
-          answersToGradeEl.innerHTML =
-            '<div class="empty-state">No answers submitted yet.</div>';
-          return;
+  submitAnswerBtn.addEventListener("click", () => {
+    if (!selectedQuestionId) return;
+    const ans = studentAnswerText.value.trim();
+    if (!ans) return;
+    const all = getAnswers();
+    all.unshift({
+      id: "a_" + Date.now(),
+      questionId: selectedQuestionId,
+      answerText: ans,
+      answeredBy: user,
+      createdAt: new Date().toISOString(),
+    });
+    saveAnswers(all);
+    studentAnswerText.value = "";
+    answerFormContainer.style.display = "none";
+    renderAnswersToGrade();
+    alert("Answer submitted!");
+  });
+
+  // ===== tab: Grade Answers =====
+  const answersToGradeEl = document.getElementById("answersToGrade");
+
+  function renderAnswersToGrade() {
+    const answers = getAnswers();
+    const questions = getQuestions();
+    const grades = getGrades();
+
+    answersToGradeEl.innerHTML = "";
+    if (!answers.length) {
+      answersToGradeEl.innerHTML =
+        '<div class="empty-state">No answers submitted yet.</div>';
+      return;
+    }
+
+    answers
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .forEach((ans) => {
+        const q = questions.find((qq) => qq.id === ans.questionId);
+        const card = document.createElement("div");
+        card.className = "answer-item";
+
+        const qtitle = document.createElement("div");
+        qtitle.style.fontWeight = "600";
+        qtitle.textContent = q ? q.text : "(Question deleted)";
+        card.appendChild(qtitle);
+
+        const subj = document.createElement("div");
+        subj.style.fontSize = "11px";
+        subj.style.color = "#64748b";
+        subj.textContent = q ? q.subject : "";
+        card.appendChild(subj);
+
+        const ansText = document.createElement("div");
+        ansText.style.marginTop = "6px";
+        ansText.textContent = "Student answer: " + ans.answerText;
+        card.appendChild(ansText);
+
+        const existing = grades.find((g) => g.answerId === ans.id);
+        const gradeRow = document.createElement("div");
+        gradeRow.className = "grade-row";
+
+        const feedbackInput = document.createElement("input");
+        feedbackInput.className = "form-input";
+        feedbackInput.placeholder = "Feedback (optional)";
+        feedbackInput.value = existing ? existing.feedback : "";
+
+        const correctBtn = document.createElement("button");
+        correctBtn.className = "grade-btn correct";
+        correctBtn.textContent = "Correct";
+
+        const wrongBtn = document.createElement("button");
+        wrongBtn.className = "grade-btn wrong";
+        wrongBtn.textContent = "Incorrect";
+
+        correctBtn.addEventListener("click", () => {
+          const allGrades = getGrades().filter((g) => g.answerId !== ans.id);
+          allGrades.unshift({
+            answerId: ans.id,
+            questionId: ans.questionId,
+            isCorrect: true,
+            feedback: feedbackInput.value,
+            gradedBy: user,
+            createdAt: new Date().toISOString(),
+          });
+          saveGrades(allGrades);
+          alert("Graded as correct.");
+        });
+
+        wrongBtn.addEventListener("click", () => {
+          const allGrades = getGrades().filter((g) => g.answerId !== ans.id);
+          allGrades.unshift({
+            answerId: ans.id,
+            questionId: ans.questionId,
+            isCorrect: false,
+            feedback: feedbackInput.value,
+            gradedBy: user,
+            createdAt: new Date().toISOString(),
+          });
+          saveGrades(allGrades);
+          alert("Graded as incorrect.");
+        });
+
+        gradeRow.appendChild(feedbackInput);
+        gradeRow.appendChild(correctBtn);
+        gradeRow.appendChild(wrongBtn);
+
+        card.appendChild(gradeRow);
+
+        if (existing) {
+          const status = document.createElement("div");
+          status.style.marginTop = "4px";
+          status.style.fontSize = "12px";
+          status.style.color = existing.isCorrect ? "#22543d" : "#9b2c2c";
+          status.textContent =
+            "Already graded as " +
+            (existing.isCorrect ? "Correct" : "Incorrect") +
+            (existing.feedback ? " — " + existing.feedback : "");
+          card.appendChild(status);
         }
 
-        // show newest first
-        answers
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-          .forEach((ans) => {
-            const q = questions.find((qq) => qq.id === ans.questionId);
-            const card = document.createElement("div");
-            card.className = "answer-item";
+        answersToGradeEl.appendChild(card);
+      });
+  }
 
-            const qtitle = document.createElement("div");
-            qtitle.style.fontWeight = "600";
-            qtitle.textContent = q ? q.text : "(Question deleted)";
-            card.appendChild(qtitle);
-
-            const subj = document.createElement("div");
-            subj.style.fontSize = "11px";
-            subj.style.color = "#64748b";
-            subj.textContent = q ? q.subject : "";
-            card.appendChild(subj);
-
-            const ansText = document.createElement("div");
-            ansText.style.marginTop = "6px";
-            ansText.textContent = "Student answer: " + ans.answerText;
-            card.appendChild(ansText);
-
-            // check if graded
-            const existing = grades.find((g) => g.answerId === ans.id);
-            const gradeRow = document.createElement("div");
-            gradeRow.className = "grade-row";
-
-            const feedbackInput = document.createElement("input");
-            feedbackInput.className = "form-input";
-            feedbackInput.placeholder = "Feedback (optional)";
-            feedbackInput.value = existing ? existing.feedback : "";
-
-            const correctBtn = document.createElement("button");
-            correctBtn.className = "grade-btn correct";
-            correctBtn.textContent = "Correct";
-
-            const wrongBtn = document.createElement("button");
-            wrongBtn.className = "grade-btn wrong";
-            wrongBtn.textContent = "Incorrect";
-
-            correctBtn.addEventListener("click", () => {
-              const allGrades = getGrades().filter((g) => g.answerId !== ans.id);
-              allGrades.unshift({
-                answerId: ans.id,
-                questionId: ans.questionId,
-                isCorrect: true,
-                feedback: feedbackInput.value,
-                gradedBy: user,
-                createdAt: new Date().toISOString(),
-              });
-              saveGrades(allGrades);
-              alert("Graded as correct.");
-            });
-
-            wrongBtn.addEventListener("click", () => {
-              const allGrades = getGrades().filter((g) => g.answerId !== ans.id);
-              allGrades.unshift({
-                answerId: ans.id,
-                questionId: ans.questionId,
-                isCorrect: false,
-                feedback: feedbackInput.value,
-                gradedBy: user,
-                createdAt: new Date().toISOString(),
-              });
-              saveGrades(allGrades);
-              alert("Graded as incorrect.");
-            });
-
-            gradeRow.appendChild(feedbackInput);
-            gradeRow.appendChild(correctBtn);
-            gradeRow.appendChild(wrongBtn);
-
-            card.appendChild(gradeRow);
-
-            // show existing grade
-            if (existing) {
-              const status = document.createElement("div");
-              status.style.marginTop = "4px";
-              status.style.fontSize = "12px";
-              status.style.color = existing.isCorrect ? "#22543d" : "#9b2c2c";
-              status.textContent =
-                "Already graded as " +
-                (existing.isCorrect ? "Correct" : "Incorrect") +
-                (existing.feedback ? " — " + existing.feedback : "");
-              card.appendChild(status);
-            }
-
-            answersToGradeEl.appendChild(card);
-          });
-      }
-
-      // initial renders
-      renderQuestionsList();
-      renderAnswerQuestions();
-      renderAnswersToGrade();
-    </script>
+  // initial renders
+  renderQuestionsList();
+  renderAnswerQuestions();
+  renderAnswersToGrade();
+</script>
 
 <script>
-  // sidebar navigation for questions.html too
+  // sidebar navigation (same destinations as index)
   const qNavDashboard = document.getElementById("navDashboard");
   const qNavReflections = document.getElementById("navReflections");
   const qNavQuestions = document.getElementById("navQuestions");
@@ -824,14 +834,12 @@
 
   if (qNavReflections) {
     qNavReflections.addEventListener("click", () => {
-      // go to main UI and jump to reflections
       window.location.href = "index.html#reflectionsSection";
     });
   }
 
   if (qNavQuestions) {
     qNavQuestions.addEventListener("click", () => {
-      // you're already here, but keep it consistent
       window.location.href = "questions.html";
     });
   }
