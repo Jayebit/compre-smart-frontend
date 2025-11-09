@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - CompreSmart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .reg-container {
+      width: 100%;
+      max-width: 440px;
+      padding: 20px;
+    }
+    .reg-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .logo-badge {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 6px; color: #2d3748; }
+    p.subtitle { margin: 0 0 22px; color: #718096; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    input:focus {
+      border-color: #667eea;
+      outline: none;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #718096;
+    }
+    .back-link a { color: #667eea; text-decoration: none; }
+    .error, .success {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .error { background: #fed7d7; color: #c53030; }
+    .success { background: #c6f6d5; color: #22543d; }
+  </style>
+</head>
+<body>
+  <div class="reg-container">
+    <div class="reg-card">
+      <div class="logo-badge">📚</div>
+      <h1>Create account</h1>
+      <p class="subtitle">Register your student account to use CompreSmart</p>
+
+      <div id="errorBox" class="error"></div>
+      <div id="successBox" class="success"></div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="regUsername">Student name / ID</label>
+          <input type="text" id="regUsername" placeholder="e.g. JuanDelaCruz or BSIT-001" required />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" placeholder="Enter password" required />
+        </div>
+        <div class="form-group">
+          <label for="regPassword2">Confirm password</label>
+          <input type="password" id="regPassword2" placeholder="Confirm password" required />
+        </div>
+        <button type="submit" class="btn">Register</button>
+      </form>
+
+      <div class="back-link">
+        Already registered? <a href="login.html">Back to login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getAccounts() {
+      return JSON.parse(localStorage.getItem("cs_accounts") || "[]");
+    }
+    function saveAccounts(list) {
+      localStorage.setItem("cs_accounts", JSON.stringify(list));
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("regUsername").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const password2 = document.getElementById("regPassword2").value;
+      const errorBox = document.getElementById("errorBox");
+      const successBox = document.getElementById("successBox");
+
+      errorBox.style.display = "none";
+      successBox.style.display = "none";
+
+      if (!username || !password) {
+        errorBox.textContent = "Please fill out all fields.";
+        errorBox.style.display = "block";
+        return;
+      }
+      if (password !== password2) {
+        errorBox.textContent = "Passwords do not match.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      const accounts = getAccounts();
+      const exists = accounts.some(acc => acc.username === username);
+      if (exists) {
+        errorBox.textContent = "That student name / ID is already registered.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      // add new account
+      accounts.push({ username, password });
+      saveAccounts(accounts);
+
+      successBox.textContent = "Account created! You can now login.";
+      successBox.style.display = "block";
+
+      // optional: auto-redirect after a bit
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

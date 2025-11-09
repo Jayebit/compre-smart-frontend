@@ -1,0 +1,1926 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CompreSmart Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .app-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* fixed sidebar */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        gap: 8px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+      .sidebar-item {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: transparent;
+        border: none;
+      }
+      .sidebar-item:hover {
+        background: #f7fafc;
+      }
+      .sidebar-item.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        margin-left: 80px; /* match sidebar width */
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        border-radius: 16px;
+        padding: 20px 30px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+      .app-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+      }
+
+      .profile-area {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .student-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: #4a5568;
+      }
+      .logout-btn {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #4a5568;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .logout-btn:hover {
+        background: #edf2f7;
+        border-color: #cbd5e0;
+      }
+
+      .progress-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+      .progress-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .progress-icon {
+        font-size: 28px;
+      }
+      .progress-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+      .progress-stats {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .stat-item {
+        flex: 1;
+        min-width: 200px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 12px;
+        color: white;
+      }
+      .stat-label {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 8px;
+      }
+      .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .subjects-section {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+
+      .semester-group {
+        margin-bottom: 32px;
+      }
+      .semester-group:last-child {
+        margin-bottom: 0;
+      }
+
+      .semester-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        background: #f7fafc;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 16px;
+      }
+      .semester-header:hover {
+        background: #edf2f7;
+      }
+      .semester-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .toggle-icon {
+        font-size: 20px;
+        color: #718096;
+        transition: transform 0.3s;
+      }
+      .toggle-icon.expanded {
+        transform: rotate(180deg);
+      }
+
+      .subjects-list {
+        display: none;
+        gap: 16px;
+        flex-direction: column;
+      }
+      .subjects-list.expanded {
+        display: flex;
+      }
+
+      .subject-card {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+      }
+      .subject-card:hover {
+        border-color: #cbd5e0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .subject-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .subject-name {
+        flex: 1;
+        min-width: 200px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+
+      .add-reflection-btn {
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+      }
+
+      .add-reflection-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .progress-bar-container {
+        background: #e2e8f0;
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 6px;
+        margin-bottom: 8px;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+        width: 0%;
+        transition: width 0.3s;
+      }
+      .progress-text {
+        font-size: 14px;
+        color: #718096;
+        font-weight: 500;
+      }
+
+      .progress-slider {
+        width: 220px;
+        margin-top: 10px;
+        display: none;
+      }
+      .subject-card.show-slider .progress-slider {
+        display: block;
+      }
+
+      .reflections-section {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+      .reflections-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .reflections-icon {
+        font-size: 28px;
+      }
+      .reflections-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+      .reflections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+      }
+      .reflection-card {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.2s;
+      }
+      .reflection-card:hover {
+        border-color: #cbd5e0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .reflection-subject {
+        font-size: 12px;
+        font-weight: 600;
+        color: #667eea;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+      .reflection-text {
+        font-size: 14px;
+        color: #4a5568;
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+      .reflection-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .reflection-date {
+        font-size: 12px;
+        color: #a0aec0;
+      }
+      .delete-btn {
+        background: transparent;
+        border: none;
+        color: #e53e3e;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        transition: all 0.2s;
+      }
+      .delete-btn:hover {
+        transform: scale(1.1);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #a0aec0;
+      }
+      .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      /* reflection modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+      }
+      .modal.active {
+        display: flex;
+      }
+      .modal-content {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* resources modal */
+      .cs-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .cs-modal {
+        background: #ffffff;
+        border-radius: 16px;
+        width: min(900px, 95vw);
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 22px 24px 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      }
+      .cs-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .cs-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+      }
+      .cs-close-btn {
+        background: #e53e3e;
+        border: none;
+        color: #fff;
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .cs-section-title {
+        font-weight: 600;
+        margin-top: 14px;
+        margin-bottom: 8px;
+        color: #4a5568;
+      }
+      .cs-note-item {
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px 10px;
+        margin-bottom: 6px;
+        background: #f8fafc;
+      }
+      .cs-note-meta {
+        font-size: 11px;
+        color: #94a3b8;
+      }
+      .cs-textarea {
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 8px 10px;
+        min-height: 75px;
+        font-family: inherit;
+      }
+      .cs-primary-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: #fff;
+        padding: 7px 14px;
+        border-radius: 9999px;
+        cursor: pointer;
+        margin-top: 6px;
+        font-weight: 500;
+      }
+      .cs-file-item a {
+        color: #667eea;
+        text-decoration: none;
+      }
+      .cs-badge {
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 9999px;
+        margin-left: 6px;
+      }
+      .cs-disabled-hint {
+        font-size: 12px;
+        color: #f97316;
+        margin-top: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 60px;
+        }
+        .main-content {
+          margin-left: 60px;
+          padding: 12px;
+        }
+        .header {
+          flex-direction: column;
+          gap: 16px;
+        }
+        .reflections-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <style>
+  .cs-settings-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+  }
+  .cs-settings-modal {
+    background: #fff;
+    width: min(780px, 95vw);
+    max-height: 90vh;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+    display: flex;
+    flex-direction: column;
+  }
+  .cs-settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px 8px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .cs-settings-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  .cs-settings-close {
+    background: #e53e3e;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 9999px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .cs-settings-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px 0;
+  }
+  .cs-settings-tab {
+    border: none;
+    background: #eef2ff;
+    color: #4f46e5;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .cs-settings-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+  }
+  .cs-settings-body {
+    padding: 14px 16px 16px;
+    overflow-y: auto;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .cs-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cs-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+  }
+  .cs-input, .cs-select, .cs-textarea {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .cs-settings-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cs-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #fff;
+    padding: 7px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .cs-btn-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .cs-pinned-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cs-pin-pill {
+    border: 1px solid #e2e8f0;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    cursor: pointer;
+    background: #fff;
+  }
+  .cs-pin-pill.active {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+  }
+  .cs-settings-hint {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+  .cs-toggle-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cs-switch {
+    width: 40px;
+    height: 22px;
+    background: #e2e8f0;
+    border-radius: 9999px;
+    position: relative;
+    cursor: pointer;
+  }
+  .cs-switch-handle {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 9999px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: all 0.2s;
+  }
+  .cs-switch.on {
+    background: #667eea;
+  }
+  .cs-switch.on .cs-switch-handle {
+    left: 20px;
+  }
+  body.cs-dark {
+    background: #0f172a;
+  }
+</style>
+
+  </head>
+  <body>
+    <div class="app-container">
+     
+     <!-- sidebar (same in index.html and questions.html) -->
+<aside class="sidebar">
+  <button class="sidebar-item" id="navDashboard" title="Dashboard">📊</button>
+  <button class="sidebar-item" id="navReflections" title="Reflections">💭</button>
+  <button class="sidebar-item" id="navQuestions" title="Questions">❓</button>
+  <button class="sidebar-item" id="navSettings" title="Settings">⚙️</button>
+</aside>
+
+
+
+      <main class="main-content">
+        <div class="container">
+          <!-- header -->
+          <div class="header">
+  <div class="logo">
+    <div class="logo-icon">📚</div>
+    <div class="app-name" id="appName">CompreSmart</div>
+  </div>
+  <div class="profile-area">
+    <img id="csAvatar" src=""
+         alt="avatar"
+         style="width:34px;height:34px;border-radius:9999px;object-fit:cover;display:none;border:2px solid #edf2f7;">
+    <div class="student-name" id="studentName">Student</div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+</div>  <!-- ✅ close the header -->
+
+
+
+          <!-- progress -->
+          <div class="progress-card">
+            <div class="progress-header">
+              <span class="progress-icon">📊</span>
+              <h2 class="progress-title" id="progressTitle">Your Progress</h2>
+            </div>
+            <div class="progress-stats">
+              <div class="stat-item">
+                <div class="stat-label">Average Completion</div>
+                <div class="stat-value" id="avgCompletion">0%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Total Reflections</div>
+                <div class="stat-value" id="totalReflections">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- subjects -->
+          <div class="subjects-section">
+            <!-- 1st sem -->
+            <div class="semester-group">
+              <div class="semester-header" onclick="toggleSemester('sem1')">
+                <div class="semester-title">
+                  <span>🎓</span>
+                  <span>1st Year, 1st Semester</span>
+                </div>
+                <span class="toggle-icon expanded" id="toggle-sem1">▼</span>
+              </div>
+              <div class="subjects-list expanded" id="subjects-sem1">
+                <!-- you can add/remove subjects as needed -->
+                <div
+                  class="subject-card"
+                  data-subject="Understanding the Self"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">Understanding the Self</div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('uts','Understanding the Self'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div
+                  class="subject-card"
+                  data-subject="Readings in the Philippine History"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">
+                      Readings in the Philippine History
+                    </div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('rph','Readings in the Philippine History'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div
+                  class="subject-card"
+                  data-subject="Mathematics in the Modern World"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">
+                      Mathematics in the Modern World
+                    </div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('mmw','Mathematics in the Modern World'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div class="subject-card" data-subject="Ethics">
+                  <div class="subject-header">
+                    <div class="subject-name">Ethics</div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('ethics','Ethics'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div
+                  class="subject-card"
+                  data-subject="The Life and Works of Rizal"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">
+                      The Life and Works of Rizal
+                    </div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('rizal','The Life and Works of Rizal'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 2nd sem -->
+            <div class="semester-group">
+              <div class="semester-header" onclick="toggleSemester('sem2')">
+                <div class="semester-title">
+                  <span>🎓</span>
+                  <span>1st Year, 2nd Semester</span>
+                </div>
+                <span class="toggle-icon expanded" id="toggle-sem2">▼</span>
+              </div>
+              <div class="subjects-list expanded" id="subjects-sem2">
+                <div
+                  class="subject-card"
+                  data-subject="Purposive Communication"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">Purposive Communication</div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('purcom','Purposive Communication'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div class="subject-card" data-subject="Art Appreciation">
+                  <div class="subject-header">
+                    <div class="subject-name">Art Appreciation</div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('artapp','Art Appreciation'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div
+                  class="subject-card"
+                  data-subject="Science, Technology and Society"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">
+                      Science, Technology and Society
+                    </div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('sts','Science, Technology and Society'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+
+                <div
+                  class="subject-card"
+                  data-subject="The Contemporary World"
+                >
+                  <div class="subject-header">
+                    <div class="subject-name">The Contemporary World</div>
+                    <button
+                      class="add-reflection-btn"
+                      onclick="openReflectionModal('tcw','The Contemporary World'); event.stopPropagation();"
+                    >
+                      ✏️ <span>Add Reflection</span>
+                    </button>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                  </div>
+                  <div class="progress-text">0% Complete</div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="progress-slider"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- reflections -->
+          <div class="reflections-section" id="reflectionsSection">
+            <div class="reflections-header">
+              <span class="reflections-icon">💭</span>
+              <h2 class="reflections-title" id="reflectionsTitle">
+                Recent Reflections
+              </h2>
+            </div>
+            <div class="reflections-grid" id="reflectionsGrid">
+              <div class="empty-state" id="emptyReflections">
+                <div class="empty-state-icon">📝</div>
+                <div class="empty-state-text">
+                  No reflections yet. Start adding your thoughts!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- reflection modal -->
+    <div class="modal" id="reflectionModal">
+      <div class="modal-content">
+        <h3 style="margin-top: 0;">Add Reflection</h3>
+        <p
+          id="modalSubject"
+          style="margin-top: 0; color: #94a3b8; font-size: 13px;"
+        ></p>
+        <textarea
+          id="reflectionText"
+          class="form-textarea"
+          placeholder="Write your reflection..."
+        ></textarea>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 16px;
+          "
+        >
+          <button id="closeModalBtn" class="logout-btn">Cancel</button>
+          <button
+            id="saveReflectionBtn"
+            class="logout-btn"
+            style="background: #667eea; color: #fff; border: none;"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- scripts -->
+    <script>
+      // ----------------------------
+      // LOGIN CHECK
+      // ----------------------------
+     const user = localStorage.getItem("cs_user");
+if (!user) {
+  window.location.href = "login.html";
+} else {
+  document.getElementById("studentName").textContent = user;
+
+  // load per-user settings to get avatar
+  const settingsKey = "cs_settings_" + user;
+  const st = JSON.parse(localStorage.getItem(settingsKey) || "{}");
+  if (st.avatar) {
+    const av = document.getElementById("csAvatar");
+    av.src = st.avatar;
+    av.style.display = "block";
+  }
+}
+
+
+      // logout
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("cs_user");
+        window.location.href = "login.html";
+      });
+
+      // nav
+      document.getElementById("navQuestions").addEventListener("click", () => {
+        window.location.href = "questions.html";
+      });
+      document.getElementById("navReflections").addEventListener("click", () => {
+        document
+          .getElementById("reflectionsSection")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+
+      // semester toggle
+      function toggleSemester(id) {
+        const list = document.getElementById("subjects-" + id);
+        const icon = document.getElementById("toggle-" + id);
+        if (!list) return;
+        const isExpanded = list.classList.contains("expanded");
+        if (isExpanded) {
+          list.classList.remove("expanded");
+          list.style.display = "none";
+          icon.classList.remove("expanded");
+        } else {
+          list.classList.add("expanded");
+          list.style.display = "flex";
+          icon.classList.add("expanded");
+        }
+      }
+
+      // ----------------------------
+      // REFLECTIONS (localStorage)
+      // ----------------------------
+      function getReflections() {
+        return JSON.parse(localStorage.getItem("cs_reflections") || "[]");
+      }
+      function saveReflections(list) {
+        localStorage.setItem("cs_reflections", JSON.stringify(list));
+      }
+
+      const reflectionsGrid = document.getElementById("reflectionsGrid");
+      const emptyReflections = document.getElementById("emptyReflections");
+
+      function renderReflections() {
+        const list = getReflections();
+        reflectionsGrid.innerHTML = "";
+        if (!list.length) {
+          reflectionsGrid.appendChild(emptyReflections);
+          emptyReflections.style.display = "block";
+        } else {
+          emptyReflections.style.display = "none";
+          list
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            .forEach((ref) => {
+              const card = document.createElement("div");
+              card.className = "reflection-card";
+
+              const subj = document.createElement("div");
+              subj.className = "reflection-subject";
+              subj.textContent = ref.subject || "Reflection";
+
+              const txt = document.createElement("div");
+              txt.className = "reflection-text";
+              txt.textContent = ref.text;
+
+              const footer = document.createElement("div");
+              footer.className = "reflection-footer";
+
+              const date = document.createElement("div");
+              date.className = "reflection-date";
+              date.textContent = new Date(ref.createdAt).toLocaleDateString();
+
+              const del = document.createElement("button");
+              del.className = "delete-btn";
+              del.textContent = "🗑️";
+              del.addEventListener("click", () => {
+                const filtered = getReflections().filter(
+                  (r) => r.id !== ref.id
+                );
+                saveReflections(filtered);
+                renderReflections();
+                updateReflectionCount();
+              });
+
+              footer.appendChild(date);
+              footer.appendChild(del);
+
+              card.appendChild(subj);
+              card.appendChild(txt);
+              card.appendChild(footer);
+
+              reflectionsGrid.appendChild(card);
+            });
+        }
+      }
+
+      function updateReflectionCount() {
+        const count = getReflections().length;
+        document.getElementById("totalReflections").textContent = count;
+      }
+
+      // reflection modal
+      const modal = document.getElementById("reflectionModal");
+      const modalSubject = document.getElementById("modalSubject");
+      const reflectionText = document.getElementById("reflectionText");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      const saveReflectionBtn = document.getElementById("saveReflectionBtn");
+      let currentSubjectName = null;
+
+      window.openReflectionModal = function (id, subjectName) {
+        currentSubjectName = subjectName || "Reflection";
+        modalSubject.textContent = "Subject: " + currentSubjectName;
+        modal.classList.add("active");
+        reflectionText.value = "";
+        reflectionText.focus();
+      };
+
+      closeModalBtn.addEventListener("click", () => {
+        modal.classList.remove("active");
+      });
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.remove("active");
+      });
+
+      saveReflectionBtn.addEventListener("click", () => {
+        const txt = reflectionText.value.trim();
+        if (!txt) return;
+        const list = getReflections();
+        list.unshift({
+          id: "ref_" + Date.now(),
+          subject: currentSubjectName,
+          text: txt,
+          createdAt: new Date().toISOString(),
+          user,
+        });
+        saveReflections(list);
+        modal.classList.remove("active");
+        renderReflections();
+        updateReflectionCount();
+      });
+
+      // ----------------------------
+      // SUBJECT PROGRESS
+      // ----------------------------
+      function getProgressMap() {
+        return JSON.parse(localStorage.getItem("cs_progress") || "{}");
+      }
+      function saveProgressMap(obj) {
+        localStorage.setItem("cs_progress", JSON.stringify(obj));
+      }
+
+      function initSubjectProgress() {
+        const cards = document.querySelectorAll(".subject-card[data-subject]");
+        const saved = getProgressMap();
+
+        cards.forEach((card) => {
+          const name = card.getAttribute("data-subject");
+          const bar = card.querySelector(".progress-bar-fill");
+          const text = card.querySelector(".progress-text");
+          const slider = card.querySelector(".progress-slider");
+
+          const value = saved[name] ?? 0;
+          bar.style.width = value + "%";
+          text.textContent = value + "% Complete";
+          slider.value = value;
+
+          // clicking card toggles slider
+          card.addEventListener("click", (e) => {
+            if (e.target.closest(".add-reflection-btn")) return;
+            if (e.target.textContent === "Resources") return;
+            card.classList.toggle("show-slider");
+          });
+
+          // slider change
+          slider.addEventListener("input", () => {
+            const v = Number(slider.value);
+            bar.style.width = v + "%";
+            text.textContent = v + "% Complete";
+
+            const current = getProgressMap();
+            current[name] = v;
+            saveProgressMap(current);
+
+            recomputeAverage();
+          });
+        });
+
+        recomputeAverage();
+      }
+
+      function recomputeAverage() {
+        const saved = getProgressMap();
+        const values = Object.values(saved);
+        const avg =
+          values.length === 0
+            ? 0
+            : Math.round(values.reduce((a, b) => a + b, 0) / values.length);
+        document.getElementById("avgCompletion").textContent = avg + "%";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderReflections();
+        updateReflectionCount();
+        initSubjectProgress();
+      });
+    </script>
+
+    <!-- RESOURCES LOGIC -->
+    <script>
+  const currentUser = localStorage.getItem("cs_user");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // add Resources button to each subject
+    document.querySelectorAll(".subject-card").forEach((card) => {
+      const titleEl = card.querySelector(".subject-name");
+      if (!titleEl) return;
+      const subjectName = titleEl.textContent.trim();
+
+      const btn = document.createElement("button");
+      btn.textContent = "Resources";
+      btn.className = "add-reflection-btn";
+      btn.style.marginLeft = "10px";
+      btn.addEventListener("click", () => openResourcesModal(subjectName));
+      card.querySelector(".subject-header").appendChild(btn);
+    });
+  });
+
+  function ensureResourcesModal() {
+    if (document.getElementById("cs-resources-modal")) return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "cs-resources-modal";
+    wrap.className = "cs-modal-backdrop";
+    wrap.innerHTML = `
+      <div class="cs-modal" id="cs-modal-inner">
+        <div class="cs-modal-header">
+          <div>
+            <div class="cs-modal-title" id="cs-modal-subject">Subject</div>
+            <div style="font-size:12px;color:#94a3b8;">Shared notes & files for this subject</div>
+          </div>
+          <button class="cs-close-btn" id="cs-modal-close">×</button>
+        </div>
+
+        <div>
+          <div class="cs-section-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Shared notes</span>
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+              <input type="checkbox" id="cs-only-mine" />
+              Only my notes
+            </label>
+          </div>
+          <div id="cs-notes-list"></div>
+
+          <textarea id="cs-new-note" class="cs-textarea" placeholder="Write a note your classmates can see..."></textarea>
+          <label style="display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;">
+            <input type="checkbox" id="cs-note-public" checked />
+            Share with class
+          </label>
+          <button id="cs-save-note" class="cs-primary-btn">Post note</button>
+          <div id="cs-note-hint" class="cs-disabled-hint" style="display:none;">You must be logged in to post.</div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div class="cs-section-title">Files</div>
+          <div id="cs-files-list"></div>
+          <form id="cs-upload-form" style="margin-top:10px;">
+            <input type="file" id="cs-file-input" />
+            <button class="cs-primary-btn" type="submit">Upload file</button>
+          </form>
+          <div id="cs-file-hint" class="cs-disabled-hint" style="display:none;">You must be logged in to upload.</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(wrap);
+
+    // close ONLY on the X button
+    document.getElementById("cs-modal-close").addEventListener("click", () => {
+      wrap.style.display = "none";
+    });
+
+    // IMPORTANT: we do NOT close when clicking backdrop anymore
+    // wrap.addEventListener("click", ...)  <-- removed
+  }
+
+  // load + render notes
+  async function loadNotes(subjectName) {
+    const notesBox = document.getElementById("cs-notes-list");
+    const onlyMineCheckbox = document.getElementById("cs-only-mine");
+    notesBox.innerHTML = "Loading notes...";
+
+    let notes = [];
+    try {
+      const res = await fetch(
+        `http://localhost:3000/notes?subject=${encodeURIComponent(subjectName)}`
+      );
+      notes = await res.json();
+    } catch (err) {
+      console.error(err);
+      notesBox.innerHTML = "<p>Could not load notes.</p>";
+      return;
+    }
+
+    const render = (allNotes) => {
+      const onlyMine = onlyMineCheckbox && onlyMineCheckbox.checked;
+      const finalNotes =
+        onlyMine && currentUser
+          ? allNotes.filter((n) => n.author === currentUser)
+          : allNotes;
+
+      if (!finalNotes.length) {
+        notesBox.innerHTML =
+          "<p style='font-size:13px;color:#94a3b8;'>No notes yet.</p>";
+        return;
+      }
+
+      notesBox.innerHTML = finalNotes
+        .map((n) => {
+          const canDelete =
+            currentUser && (currentUser === n.author || currentUser === "admin");
+          return `
+            <div class="cs-note-item">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                <div>${n.content}</div>
+                ${
+                  canDelete
+                    ? `<button data-del-note="${n.id}" style="background:none;border:none;color:#e11d48;cursor:pointer;font-size:14px;">🗑</button>`
+                    : ""
+                }
+              </div>
+              <div class="cs-note-meta">
+                ${n.author || "Unknown"} • ${new Date(n.createdAt).toLocaleString()}
+                ${n.isPublic ? "" : "<span class='cs-badge'>Private</span>"}
+              </div>
+              <div style="margin-top:6px;">
+                <strong style="font-size:12px;">Comments:</strong>
+                <div>
+                  ${
+                    n.comments && n.comments.length
+                      ? n.comments
+                          .map(
+                            (c) =>
+                              `<div style="font-size:12px;margin-top:3px;"><strong>${c.author}:</strong> ${c.content}</div>`
+                          )
+                          .join("")
+                      : "<div style='font-size:12px;color:#cbd5e1;'>No comments.</div>"
+                  }
+                </div>
+                ${
+                  currentUser
+                    ? `<input data-note="${n.id}" class="cs-comment-input" placeholder="Add a comment..." style="width:100%;margin-top:4px;padding:4px 6px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;" />`
+                    : ""
+                }
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      // comment handlers
+      if (currentUser) {
+        document.querySelectorAll(".cs-comment-input").forEach((inp) => {
+          inp.addEventListener("keydown", async (e) => {
+            if (e.key === "Enter") {
+              const noteId = inp.getAttribute("data-note");
+              const content = inp.value.trim();
+              if (!content) return;
+              await fetch(`http://localhost:3000/notes/${noteId}/comments`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  author: currentUser,
+                  content,
+                }),
+              });
+              // just refresh notes, keep modal
+              loadNotes(subjectName);
+            }
+          });
+        });
+
+        // delete handlers
+        document.querySelectorAll("[data-del-note]").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation(); // extra safety
+            const id = btn.getAttribute("data-del-note");
+            await fetch(`http://localhost:3000/notes/${id}`, {
+              method: "DELETE",
+            });
+            // just refresh notes, keep modal
+            loadNotes(subjectName);
+          });
+        });
+      }
+
+      // filter
+      if (onlyMineCheckbox) {
+        onlyMineCheckbox.onchange = () => render(notes);
+      }
+    };
+
+    render(notes);
+  }
+
+  // load + render files
+  async function loadFiles(subjectName) {
+    const filesBox = document.getElementById("cs-files-list");
+    filesBox.innerHTML = "Loading files...";
+    let files = [];
+    try {
+      const resF = await fetch(
+        `http://localhost:3000/files?subject=${encodeURIComponent(subjectName)}`
+      );
+      files = await resF.json();
+    } catch (err) {
+      console.error(err);
+      filesBox.innerHTML = "<p>Could not load files.</p>";
+      return;
+    }
+
+    if (!files.length) {
+      filesBox.innerHTML =
+        "<p style='font-size:13px;color:#94a3b8;'>No files yet.</p>";
+      return;
+    }
+
+    filesBox.innerHTML = files
+      .map((f) => {
+        const canDelete =
+          currentUser && (currentUser === f.uploader || currentUser === "admin");
+        return `
+          <div class="cs-file-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <a href="http://localhost:3000${f.filePath}" target="_blank">${f.originalName}</a>
+              <div style="font-size:11px;color:#94a3b8;">Uploaded by ${f.uploader || "Unknown"}</div>
+            </div>
+            <div>
+              <span class="cs-badge">${new Date(f.uploadedAt).toLocaleDateString()}</span>
+              ${
+                canDelete
+                  ? `<button data-del-file="${f.id}" style="background:none;border:none;color:#e11d48;cursor:pointer;font-size:14px;">🗑</button>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+    // delete file handlers
+    document.querySelectorAll("[data-del-file]").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation(); // extra safety
+        const id = btn.getAttribute("data-del-file");
+        await fetch(
+          `http://localhost:3000/files/${id}?user=${encodeURIComponent(
+            currentUser || ""
+          )}`,
+          { method: "DELETE" }
+        );
+        // just refresh files, keep modal
+        loadFiles(subjectName);
+      });
+    });
+  }
+
+  async function openResourcesModal(subjectName) {
+    ensureResourcesModal();
+    const modal = document.getElementById("cs-resources-modal");
+    modal.style.display = "flex";
+    document.getElementById("cs-modal-subject").textContent = subjectName;
+
+    // hints
+    document.getElementById("cs-note-hint").style.display = currentUser
+      ? "none"
+      : "block";
+    document.getElementById("cs-file-hint").style.display = currentUser
+      ? "none"
+      : "block";
+
+    // load lists
+    loadNotes(subjectName);
+    loadFiles(subjectName);
+
+    // post note
+    document.getElementById("cs-save-note").onclick = async () => {
+      if (!currentUser) return;
+      const content = document.getElementById("cs-new-note").value.trim();
+      const isPublic = document.getElementById("cs-note-public").checked;
+      if (!content) return;
+      await fetch("http://localhost:3000/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: subjectName,
+          author: currentUser,
+          content,
+          isPublic,
+        }),
+      });
+      document.getElementById("cs-new-note").value = "";
+      // just refresh notes
+      loadNotes(subjectName);
+    };
+
+    // upload file
+    document.getElementById("cs-upload-form").onsubmit = async (e) => {
+      e.preventDefault();
+      if (!currentUser) return;
+      const fileInput = document.getElementById("cs-file-input");
+      if (!fileInput.files[0]) return;
+
+      const fd = new FormData();
+      fd.append("subject", subjectName);
+      fd.append("file", fileInput.files[0]);
+      fd.append("uploader", currentUser);
+
+      await fetch("http://localhost:3000/upload", {
+        method: "POST",
+        body: fd,
+      });
+
+      fileInput.value = "";
+      // just refresh files
+      loadFiles(subjectName);
+    };
+  }
+</script>
+
+
+
+
+
+<div class="cs-settings-backdrop" id="cs-settings-backdrop">
+  <div class="cs-settings-modal">
+    <div class="cs-settings-header">
+      <div class="cs-settings-title">Settings</div>
+      <button class="cs-settings-close" id="cs-settings-close">×</button>
+    </div>
+    <div class="cs-settings-tabs">
+      <button class="cs-settings-tab active" data-tab="profile">Profile</button>
+      <button class="cs-settings-tab" data-tab="prefs">Preferences</button>
+      <button class="cs-settings-tab" data-tab="data">Data & Privacy</button>
+    </div>
+    <div class="cs-settings-body" id="cs-settings-body">
+      <!-- content injected by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // SETTINGS MODULE
+  const settingsBackdrop = document.getElementById("cs-settings-backdrop");
+  const settingsClose = document.getElementById("cs-settings-close");
+  const settingsBody = document.getElementById("cs-settings-body");
+  const settingsTabs = document.querySelectorAll(".cs-settings-tab");
+  const settingsBtn = document.querySelector('.sidebar button[title="Settings"]');
+  const currentUserName = localStorage.getItem("cs_user");
+
+  // per-user settings key
+  function getSettingsKey() {
+    return "cs_settings_" + (currentUserName || "guest");
+  }
+
+  function loadSettings() {
+    return JSON.parse(localStorage.getItem(getSettingsKey()) || "{}");
+  }
+
+  function saveSettings(obj) {
+    localStorage.setItem(getSettingsKey(), JSON.stringify(obj));
+  }
+
+  function openSettings() {
+    settingsBackdrop.style.display = "flex";
+    renderSettingsTab("profile");
+  }
+
+  function closeSettings() {
+    settingsBackdrop.style.display = "none";
+  }
+
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", openSettings);
+  }
+  settingsClose.addEventListener("click", closeSettings);
+  settingsBackdrop.addEventListener("click", (e) => {
+    if (e.target.id === "cs-settings-backdrop") closeSettings();
+  });
+
+  // tab switching
+  settingsTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      settingsTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      renderSettingsTab(tab.dataset.tab);
+    });
+  });
+
+  function renderSettingsTab(tabName) {
+    const st = loadSettings();
+    if (tabName === "profile") {
+      settingsBody.innerHTML = `
+        <div class="cs-field">
+          <label class="cs-label">Display name</label>
+          <input id="cs-prof-name" class="cs-input" value="${st.displayName || currentUserName || ""}" />
+          <p class="cs-settings-hint">This shows on the dashboard header.</p>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Bio / About</label>
+          <textarea id="cs-prof-bio" class="cs-textarea" rows="3" placeholder="Tell something about you...">${st.bio || ""}</textarea>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Change password</label>
+          <input id="cs-prof-pass" class="cs-input" type="password" placeholder="New password" />
+          <button class="cs-btn-primary" id="cs-prof-save-pass">Update password</button>
+          <p class="cs-settings-hint">This will call /change-password on your backend.</p>
+        </div>
+        <button class="cs-btn-primary" id="cs-prof-save">Save profile</button>
+      `;
+
+      document.getElementById("cs-prof-save").onclick = () => {
+        const newName = document.getElementById("cs-prof-name").value.trim();
+        const newBio = document.getElementById("cs-prof-bio").value.trim();
+        const s = loadSettings();
+        s.displayName = newName;
+        s.bio = newBio;
+        saveSettings(s);
+        // update header instantly
+        if (newName) {
+          const headerName = document.getElementById("studentName");
+          if (headerName) headerName.textContent = newName;
+        }
+        alert("Profile saved.");
+      };
+
+      document.getElementById("cs-prof-save-pass").onclick = async () => {
+        const newPass = document.getElementById("cs-prof-pass").value.trim();
+        if (!newPass) return alert("Enter a password first.");
+        try {
+          await fetch("http://localhost:3000/change-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: currentUserName,
+              newPassword: newPass,
+            }),
+          });
+          alert("Password update requested. Check server logs.");
+          document.getElementById("cs-prof-pass").value = "";
+        } catch (e) {
+          console.error(e);
+          alert("Could not update password (check backend).");
+        }
+      };
+
+    } else if (tabName === "prefs") {
+      // collect subject names from DOM
+      const subjectEls = Array.from(document.querySelectorAll(".subject-card[data-subject]"));
+      const allSubjects = subjectEls.map((el) => el.getAttribute("data-subject"));
+      const pinned = st.pinnedSubjects || [];
+      const darkOn = document.body.classList.contains("cs-dark") || st.darkMode;
+
+      settingsBody.innerHTML = `
+        <div class="cs-field">
+          <label class="cs-label">Dark mode</label>
+          <div class="cs-toggle-line">
+            <div id="cs-dark-switch" class="cs-switch ${darkOn ? "on" : ""}">
+              <div class="cs-switch-handle"></div>
+            </div>
+            <span class="cs-settings-hint">Toggle dark background for dashboard</span>
+          </div>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Pinned subjects</label>
+          <div class="cs-pinned-subjects" id="cs-pinned-box">
+            ${allSubjects
+              .map((sName) => {
+                const isPinned = pinned.includes(sName);
+                return `<button class="cs-pin-pill ${isPinned ? "active" : ""}" data-subj="${sName}">${isPinned ? "⭐" : "☆"} ${sName}</button>`;
+              })
+              .join("")}
+          </div>
+          <p class="cs-settings-hint">Pinned subjects can be highlighted in your list.</p>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Weekly reminder day</label>
+          <select id="cs-reminder-day" class="cs-select">
+            <option value="">None</option>
+            <option value="Monday" ${st.reminderDay === "Monday" ? "selected" : ""}>Monday</option>
+            <option value="Tuesday" ${st.reminderDay === "Tuesday" ? "selected" : ""}>Tuesday</option>
+            <option value="Wednesday" ${st.reminderDay === "Wednesday" ? "selected" : ""}>Wednesday</option>
+            <option value="Thursday" ${st.reminderDay === "Thursday" ? "selected" : ""}>Thursday</option>
+            <option value="Friday" ${st.reminderDay === "Friday" ? "selected" : ""}>Friday</option>
+          </select>
+        </div>
+        <button class="cs-btn-primary" id="cs-prefs-save">Save preferences</button>
+      `;
+
+      // dark mode toggle
+      const darkSwitch = document.getElementById("cs-dark-switch");
+      darkSwitch.addEventListener("click", () => {
+        darkSwitch.classList.toggle("on");
+        const s = loadSettings();
+        const isOn = darkSwitch.classList.contains("on");
+        s.darkMode = isOn;
+        saveSettings(s);
+        document.body.classList.toggle("cs-dark", isOn);
+      });
+
+      // pin subject toggles
+      document.querySelectorAll(".cs-pin-pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          pill.classList.toggle("active");
+        });
+      });
+
+      document.getElementById("cs-prefs-save").onclick = () => {
+        const s = loadSettings();
+        const newPinned = Array.from(document.querySelectorAll(".cs-pin-pill.active")).map((p) =>
+          p.getAttribute("data-subj")
+        );
+        s.pinnedSubjects = newPinned;
+        s.reminderDay = document.getElementById("cs-reminder-day").value;
+        saveSettings(s);
+        // visually mark pinned on dashboard
+        markPinnedSubjects(newPinned);
+        alert("Preferences saved.");
+      };
+
+    } else if (tabName === "data") {
+      settingsBody.innerHTML = `
+        <div class="cs-field">
+          <label class="cs-label">Export my data</label>
+          <p class="cs-settings-hint">This will download your reflections, progress and settings as JSON.</p>
+          <button class="cs-btn-primary" id="cs-export-data">Download data</button>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Reset local dashboard data</label>
+          <p class="cs-settings-hint">Clears reflections, progress and settings for this browser.</p>
+          <button class="cs-btn-danger" id="cs-reset-local">Clear local data</button>
+        </div>
+        <div class="cs-field">
+          <label class="cs-label">Delete account</label>
+          <p class="cs-settings-hint">This will call /delete-user on your backend (requires route).</p>
+          <button class="cs-btn-danger" id="cs-delete-account">Delete my account</button>
+        </div>
+      `;
+
+      document.getElementById("cs-export-data").onclick = () => {
+        const exportObj = {
+          user: currentUserName,
+          reflections: JSON.parse(localStorage.getItem("cs_reflections") || "[]"),
+          progress: JSON.parse(localStorage.getItem("cs_progress") || "{}"),
+          settings: loadSettings(),
+        };
+        const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "compreSmart_backup.json";
+        link.click();
+      };
+
+      document.getElementById("cs-reset-local").onclick = () => {
+        if (!confirm("Clear local reflections, progress and settings?")) return;
+        localStorage.removeItem("cs_reflections");
+        localStorage.removeItem("cs_progress");
+        localStorage.removeItem(getSettingsKey());
+        alert("Local data cleared. Reloading...");
+        location.reload();
+      };
+
+      document.getElementById("cs-delete-account").onclick = async () => {
+        if (!confirm("This will try to delete your account on the server. Continue?")) return;
+        try {
+          await fetch("http://localhost:3000/delete-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: currentUserName }),
+          });
+          alert("Account deletion requested. Logging out.");
+          localStorage.removeItem("cs_user");
+          window.location.href = "login.html";
+        } catch (e) {
+          console.error(e);
+          alert("Could not contact server to delete. Check backend.");
+        }
+      };
+    }
+  }
+
+  // highlight pinned subjects on dashboard
+  function markPinnedSubjects(pinnedList) {
+    document.querySelectorAll(".subject-card[data-subject]").forEach((card) => {
+      const name = card.getAttribute("data-subject");
+      if (pinnedList.includes(name)) {
+        card.style.border = "2px solid rgba(102,126,234,0.4)";
+        card.style.boxShadow = "0 4px 12px rgba(102,126,234,0.15)";
+      } else {
+        card.style.border = "1px solid #e2e8f0";
+        card.style.boxShadow = "none";
+      }
+    });
+  }
+
+  // apply dark + pinned on load
+  document.addEventListener("DOMContentLoaded", () => {
+    const st = loadSettings();
+    if (st.darkMode) {
+      document.body.classList.add("cs-dark");
+    }
+    if (st.pinnedSubjects) {
+      markPinnedSubjects(st.pinnedSubjects);
+    }
+  });
+
+// settings button – always go to settings.html
+const navSettings = document.getElementById("navSettings");
+if (navSettings) {
+  navSettings.addEventListener("click", () => {
+    window.location.href = "settings.html";
+  });
+}
+
+</script>
+
+  </body>
+</html>

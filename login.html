@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompreSmart Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .logo-badge {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    h1 { margin: 0 0 8px; color: #2d3748; }
+    p.subtitle { margin: 0 0 28px; color: #718096; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; color: #4a5568; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    input:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102,126,234,.12);
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .login-btn:hover { opacity: .95; }
+    .small-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #718096;
+    }
+    .small-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .error {
+      background: #fed7d7;
+      color: #c53030;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-badge">📚</div>
+      <h1>Welcome to CompreSmart</h1>
+      <p class="subtitle">Log in to continue</p>
+
+      <div id="errorBox" class="error"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Student name / ID</label>
+          <input type="text" id="username" placeholder="e.g. BSIT-2025-001" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="rememberMe" />
+          <label for="rememberMe">Remember me on this device</label>
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+      <div class="small-link">
+        No account yet? <a href="register.html">Register here</a>
+      </div>
+    </div>
+  </div>
+
+ <script>
+  // 1) make sure there is at least one account (admin)
+  function ensureDefaultAccount() {
+    const existing = localStorage.getItem("cs_accounts");
+    if (!existing) {
+      const defaultAccounts = [
+        { username: "admin", password: "admin123" }
+      ];
+      localStorage.setItem("cs_accounts", JSON.stringify(defaultAccounts));
+    }
+  }
+
+  // helper: get accounts
+  function getAccounts() {
+    return JSON.parse(localStorage.getItem("cs_accounts") || "[]");
+  }
+
+  // run on page load
+  ensureDefaultAccount();
+
+  // auto-login if remember was set
+  const rememberFlag = localStorage.getItem("cs_remember");
+  const currentUser = localStorage.getItem("cs_user");
+  if (rememberFlag === "true" && currentUser) {
+    window.location.href = "index.html";
+  }
+
+  // 2) handle login form
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const remember = document.getElementById("rememberMe").checked;
+    const errorBox = document.getElementById("errorBox");
+
+    const accounts = getAccounts();
+    const found = accounts.find(
+      (acc) => acc.username === username && acc.password === password
+    );
+
+    if (!found) {
+      errorBox.textContent = "Account not found or password incorrect.";
+      errorBox.style.display = "block";
+      return;
+    }
+
+    errorBox.style.display = "none";
+    localStorage.setItem("cs_user", username);
+    localStorage.setItem("cs_remember", remember ? "true" : "false");
+
+    window.location.href = "index.html";
+  });
+</script>
+
+  
+</body>
+</html>

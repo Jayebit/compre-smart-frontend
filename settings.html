@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CompreSmart – Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        min-height: 100vh;
+        display: flex;
+      }
+      /* reuse your fixed sidebar */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        gap: 8px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+      .sidebar-item {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 24px;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        transition: 0.2s;
+      }
+      .sidebar-item:hover {
+        background: #f7fafc;
+      }
+      .sidebar-item.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .settings-page {
+        margin-left: 80px;
+        width: 100%;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .settings-shell {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: #fff;
+        border-radius: 16px;
+        padding: 18px 22px;
+        margin-bottom: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .header-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a202c;
+      }
+      .header-sub {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+
+      /* settings card */
+      .settings-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        padding: 14px 18px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .tab {
+        padding: 8px 16px;
+        border: none;
+        background: transparent;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #64748b;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+      }
+
+      .tab-body {
+        padding: 18px 18px 22px;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 5px;
+      }
+      .form-input,
+      .form-textarea,
+      .form-select {
+        width: 100%;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-family: inherit;
+      }
+      .form-textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .btn {
+        border: none;
+        border-radius: 9999px;
+        padding: 8px 18px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+      }
+      .pill-group {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .pill {
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        padding: 6px 12px;
+        background: #fff;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .pill.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-color: transparent;
+      }
+      .data-card {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .btn-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+      .cs-settings-hint {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- sidebar same as other pages -->
+    <aside class="sidebar">
+      <button class="sidebar-item" id="navDashboard" title="Dashboard">📊</button>
+      <button class="sidebar-item" id="navReflections" title="Reflections">💭</button>
+      <button class="sidebar-item" id="navQuestions" title="Questions">❓</button>
+      <button class="sidebar-item active" id="navSettings" title="Settings">⚙️</button>
+    </aside>
+
+    <div class="settings-page">
+      <div class="settings-shell">
+        <div class="header">
+          <div>
+            <div class="header-title">Settings</div>
+            <div class="header-sub">Manage your profile & preferences</div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="tabs">
+            <button class="tab active" data-tab="profile">Profile</button>
+            <button class="tab" data-tab="prefs">Preferences</button>
+            <button class="tab" data-tab="data">Data & privacy</button>
+          </div>
+          <div class="tab-body">
+            <!-- Profile -->
+            <div class="tab-content active" data-content="profile">
+              <div class="form-group">
+                <label class="form-label">Display name</label>
+                <input id="set-display-name" class="form-input" placeholder="Enter your name" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Bio / About you</label>
+                <textarea id="set-bio" class="form-textarea" placeholder="Write something..."></textarea>
+              </div>
+
+              <!-- NEW: profile picture -->
+              <div class="form-group">
+                <label class="form-label">Profile picture</label>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <img
+                    id="cs-prof-avatar-preview"
+                    src=""
+                    alt="preview"
+                    style="width:56px;height:56px;border-radius:9999px;object-fit:cover;background:#e2e8f0;"
+                  />
+                  <input id="cs-prof-avatar-input" type="file" accept="image/*" />
+                </div>
+                <p class="cs-settings-hint">Pick a square image for best results.</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Change password</label>
+                <div style="display:flex;gap:6px;">
+                  <input id="set-password" type="password" class="form-input" placeholder="New password" />
+                  <button id="btn-pass" class="btn">Update</button>
+                </div>
+              </div>
+              <button id="btn-save-profile" class="btn btn-primary">Save profile</button>
+            </div>
+
+            <!-- Preferences -->
+            <div class="tab-content" data-content="prefs">
+              <div class="form-group">
+                <label class="form-label">Pinned subjects</label>
+                <div id="pills" class="pill-group">
+                  <button class="pill">Understanding the Self</button>
+                  <button class="pill">Rizal</button>
+                  <button class="pill">Purposive Communication</button>
+                  <button class="pill">Mathematics in the Modern World</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Weekly reminder day</label>
+                <select id="set-reminder" class="form-select">
+                  <option value="">None</option>
+                  <option>Monday</option>
+                  <option>Tuesday</option>
+                  <option>Wednesday</option>
+                  <option>Thursday</option>
+                  <option>Friday</option>
+                </select>
+              </div>
+              <button id="btn-save-prefs" class="btn btn-primary">Save preferences</button>
+            </div>
+
+            <!-- Data -->
+            <div class="tab-content" data-content="data">
+              <div class="data-card">
+                <span>Export my data (JSON)</span>
+                <button id="btn-export" class="btn">Download</button>
+              </div>
+              <div class="data-card">
+                <span>Reset local dashboard data</span>
+                <button id="btn-reset" class="btn btn-danger">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ===== protect page =====
+      const u = localStorage.getItem("cs_user");
+      if (!u) {
+        window.location.href = "login.html";
+      }
+
+      // ===== nav to other pages =====
+      const btnDash = document.getElementById("navDashboard");
+      if (btnDash) btnDash.onclick = () => (window.location.href = "index.html");
+      const btnQuest = document.getElementById("navQuestions");
+      if (btnQuest) btnQuest.onclick = () => (window.location.href = "questions.html");
+      const btnRefl = document.getElementById("navReflections");
+      if (btnRefl) btnRefl.onclick = () => (window.location.href = "index.html#reflectionsSection");
+
+      // ===== tabs =====
+      const tabs = document.querySelectorAll(".tab");
+      const contents = document.querySelectorAll(".tab-content");
+      tabs.forEach((t) => {
+        t.addEventListener("click", () => {
+          tabs.forEach((x) => x.classList.remove("active"));
+          contents.forEach((x) => x.classList.remove("active"));
+          t.classList.add("active");
+          document
+            .querySelector(`[data-content="${t.dataset.tab}"]`)
+            .classList.add("active");
+        });
+      });
+
+      // ===== settings storage =====
+      function settingsKey() {
+        return "cs_settings_" + (u || "guest");
+      }
+      function loadSettings() {
+        return JSON.parse(localStorage.getItem(settingsKey()) || "{}");
+      }
+      function saveSettings(s) {
+        localStorage.setItem(settingsKey(), JSON.stringify(s));
+      }
+
+      // ===== populate fields on load =====
+      const s = loadSettings();
+      document.getElementById("set-display-name").value = s.displayName || u || "";
+      document.getElementById("set-bio").value = s.bio || "";
+      if (s.reminderDay) document.getElementById("set-reminder").value = s.reminderDay;
+
+      // avatar: show saved one
+      const avatarPreview = document.getElementById("cs-prof-avatar-preview");
+      const avatarInput = document.getElementById("cs-prof-avatar-input");
+      if (s.avatar) {
+        avatarPreview.src = s.avatar;
+      }
+
+      // avatar upload handler
+      if (avatarInput) {
+        avatarInput.addEventListener("change", () => {
+          const file = avatarInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            avatarPreview.src = reader.result;
+            const current = loadSettings();
+            current.avatar = reader.result; // base64
+            saveSettings(current);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // pill click
+      document.querySelectorAll("#pills .pill").forEach((p) => {
+        p.addEventListener("click", () => p.classList.toggle("active"));
+      });
+
+      // save profile
+      document.getElementById("btn-save-profile").onclick = () => {
+        const ss = loadSettings();
+        ss.displayName = document.getElementById("set-display-name").value.trim();
+        ss.bio = document.getElementById("set-bio").value.trim();
+        // avatar already saved on change
+        saveSettings(ss);
+        alert("Profile saved.");
+      };
+
+      // change password – calls backend if you make the route
+      document.getElementById("btn-pass").onclick = async () => {
+        const newPass = document.getElementById("set-password").value.trim();
+        if (!newPass) return alert("Enter a password");
+        try {
+          await fetch("http://localhost:3000/change-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: u, newPassword: newPass }),
+          });
+          alert("Password updated (check backend).");
+          document.getElementById("set-password").value = "";
+        } catch (e) {
+          alert("Could not contact server.");
+        }
+      };
+
+      // save prefs
+      document.getElementById("btn-save-prefs").onclick = () => {
+        const ss = loadSettings();
+        const pinned = Array.from(document.querySelectorAll("#pills .pill.active")).map(
+          (p) => p.textContent.trim()
+        );
+        ss.pinnedSubjects = pinned;
+        ss.reminderDay = document.getElementById("set-reminder").value;
+        saveSettings(ss);
+        alert("Preferences saved.");
+      };
+
+      // export data
+      document.getElementById("btn-export").onclick = () => {
+        const exportObj = {
+          user: u,
+          reflections: JSON.parse(localStorage.getItem("cs_reflections") || "[]"),
+          progress: JSON.parse(localStorage.getItem("cs_progress") || "{}"),
+          settings: loadSettings(),
+        };
+        const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "compreSmart_backup.json";
+        a.click();
+      };
+
+      // reset local
+      document.getElementById("btn-reset").onclick = () => {
+        if (!confirm("Clear local data?")) return;
+        localStorage.removeItem("cs_reflections");
+        localStorage.removeItem("cs_progress");
+        localStorage.removeItem(settingsKey());
+        alert("Local data cleared.");
+      };
+    </script>
+
+    
+  </body>
+</html>
