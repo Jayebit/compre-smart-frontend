@@ -1,432 +1,375 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta charset="UTF-8" />
-    <title>CompreSmart Question Bank</title>
+    <title>CompreSmart – Question Bank</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      .app-container {
-        display: flex;
-        min-height: 100vh;
-      }
-      .sidebar {
-        width: 80px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px 0;
-        gap: 8px;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      }
-      .sidebar-item {
-        width: 56px;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        font-size: 24px;
-        cursor: pointer;
-        transition: all 0.2s;
-        background: transparent;
-        border: none;
-      }
-      .sidebar-item:hover {
-        background: #f7fafc;
-      }
-      .sidebar-item.active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-      }
-      .main-content {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-      }
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-      }
-      .header {
-        background: white;
-        border-radius: 16px;
-        padding: 20px 30px;
-        margin-bottom: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-      }
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-      .logo {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .logo-icon {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-      }
-      .app-name {
-        font-size: 20px;
-        font-weight: 700;
-        color: #2d3748;
-      }
-      .page-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #667eea;
-        padding-left: 20px;
-        border-left: 2px solid #e2e8f0;
-      }
-      .profile-area {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .student-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: #4a5568;
-      }
-      .logout-btn {
-        background: #f7fafc;
-        border: 1px solid #e2e8f0;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #4a5568;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .logout-btn:hover {
-        background: #edf2f7;
-        border-color: #cbd5e0;
-      }
-      .tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 16px;
-      }
-      .tab-btn {
-        background: rgba(255, 255, 255, 0.3);
-        border: none;
-        padding: 8px 16px;
-        border-radius: 999px;
-        color: #fff;
-        font-weight: 500;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      .tab-btn.active {
-        background: #fff;
-        color: #667eea;
-      }
-      .card {
-        background: white;
-        border-radius: 16px;
-        padding: 30px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-      }
-      .card-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-      }
-      .card-title {
-        font-size: 20px;
-        font-weight: 600;
-      }
-      .form-group {
-        margin-bottom: 16px;
-      }
-      .form-label {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-      .form-select,
-      .form-textarea,
-      .form-input {
-        width: 100%;
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid #d7dce3;
-        font-family: inherit;
-        font-size: 14px;
-      }
-      .form-textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-      .save-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #fff;
-        border: none;
-        padding: 10px 24px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-        display: inline-flex;
-        gap: 6px;
-        align-items: center;
-      }
-      .questions-list {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-      .question-item {
-        background: #f7fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 14px;
-      }
-      .question-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 8px;
-      }
-      .subject-tag {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #fff;
-        padding: 3px 10px;
-        border-radius: 999px;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-      }
-      .delete-btn {
-        background: transparent;
-        border: none;
-        color: #e53e3e;
-        cursor: pointer;
-        font-size: 16px;
-      }
-      .answer-block {
-        background: #fff;
-        border-left: 3px solid #667eea;
-        border-radius: 8px;
-        padding: 8px 10px;
-        font-size: 13px;
-        color: #4a5568;
-      }
-      .empty-state {
-        text-align: center;
-        color: #94a3b8;
-        padding: 30px 10px;
-      }
-      .answer-item {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 12px;
-        margin-bottom: 10px;
-      }
-      .grade-row {
-        display: flex;
-        gap: 6px;
-        margin-top: 6px;
-      }
-      .grade-btn {
-        border: none;
-        padding: 5px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 12px;
-      }
-      .grade-btn.correct {
-        background: #c6f6d5;
-        color: #22543d;
-      }
-      .grade-btn.wrong {
-        background: #fed7d7;
-        color: #9b2c2c;
-      }
-      @media (max-width: 768px) {
-        .app-container {
-          flex-direction: column;
-        }
-        .sidebar {
-          flex-direction: row;
-          width: 100%;
-          justify-content: center;
-        }
-        .header {
-          flex-direction: column;
-          gap: 10px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="app-container">
-      <aside class="sidebar">
-        <button class="sidebar-item" id="navDashboard" title="Dashboard">📊</button>
-        <button class="sidebar-item" id="navReflections" title="Reflections">💭</button>
-        <button class="sidebar-item" id="navQuestions" title="Questions">❓</button>
-        <button class="sidebar-item" id="navSettings" title="Settings">⚙️</button>
-      </aside>
-      <main class="main-content">
-        <div class="container">
-          <header class="header">
-            <div class="header-left">
-              <div class="logo">
-                <div class="logo-icon">📚</div>
-                <div class="app-name">CompreSmart</div>
-              </div>
-              <h1 class="page-title">Student Question Bank</h1>
-            </div>
-            <div class="profile-area">
-              <img
-                id="csAvatar"
-                src=""
-                alt="avatar"
-                style="width:34px;height:34px;border-radius:9999px;object-fit:cover;display:none;border:2px solid #edf2f7;"
-              />
-              <div class="student-name" id="studentName">Student</div>
-              <button class="logout-btn" id="logoutBtn">Logout</button>
-            </div>
-          </header>
 
-          <!-- tabs -->
-          <div class="tabs">
-            <button class="tab-btn active" data-tab="add">Add Question</button>
-            <button class="tab-btn" data-tab="answer">Answer Questions</button>
-            <button class="tab-btn" data-tab="grade">Grade Answers</button>
-          </div>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-          <!-- ADD QUESTION -->
-          <div class="card" id="tab-add">
-            <div class="card-header">
-              <span>➕</span>
-              <span class="card-title">Add a Question</span>
-            </div>
-            <form id="questionForm">
-              <div class="form-group">
-                <label class="form-label" for="subjectSelect">Subject</label>
-                <select class="form-select" id="subjectSelect" required>
-                  <option value="">Loading subjects...</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="questionText">Question</label>
-                <textarea
-                  class="form-textarea"
-                  id="questionText"
-                  placeholder="Enter your question here..."
-                  required
-                ></textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="suggestedAnswer"
-                  >Suggested answer (optional)</label
-                >
-                <textarea
-                  class="form-textarea"
-                  id="suggestedAnswer"
-                  placeholder="Add a model answer here..."
-                ></textarea>
-              </div>
-              <button type="submit" class="save-btn">
-                <span>💾</span>
-                <span>Save question</span>
-              </button>
-            </form>
-            <hr
-              style="
-                margin: 20px 0;
-                border: none;
-                border-top: 1px solid #edf0f3;
-              "
-            />
-            <h3 style="margin-bottom: 10px;">Your questions</h3>
-            <div id="questionsList" class="questions-list"></div>
-          </div>
+<style>
+/* ==========================================
+   BASE  
+========================================== */
+body {
+    margin:0;
+    padding:0;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height:100vh;
+}
+* { box-sizing: border-box; }
 
-          <!-- ANSWER QUESTIONS -->
-          <div class="card" id="tab-answer" style="display:none;">
-            <div class="card-header">
-              <span>🖊️</span>
-              <span class="card-title">Answer a Question</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="answerSubjectSelect"
-                >Filter by subject</label
-              >
-              <select class="form-select" id="answerSubjectSelect">
-                <option value="">All subjects</option>
-              </select>
-            </div>
-            <div id="answerQuestionsList" class="questions-list"></div>
-            <div
-              id="answerFormContainer"
-              style="margin-top: 20px; display: none;"
-            >
-              <h4>Write your answer</h4>
-              <textarea
-                id="studentAnswerText"
-                class="form-textarea"
-                placeholder="Type your answer here..."
-              ></textarea>
-              <button
-                id="submitAnswerBtn"
-                class="save-btn"
-                style="margin-top: 10px;"
-              >
-                Submit answer
-              </button>
-            </div>
-          </div>
+.app-container {
+    display:flex;
+    min-height:100vh;
+}
 
-          <!-- GRADE ANSWERS -->
-          <div class="card" id="tab-grade" style="display:none;">
-            <div class="card-header">
-              <span>✅</span>
-              <span class="card-title">Grade Answers</span>
-            </div>
-            <p style="color:#64748b; font-size:0.85rem; margin-top:0;">
-              These are answers submitted by students in this question bank.
-            </p>
-            <div id="answersToGrade"></div>
-          </div>
+/* ==========================================
+   SIDEBAR — SAME AS NEW UI  
+========================================== */
+.sidebar {
+    width:80px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border-right:1px solid rgba(255,255,255,0.15);
+    padding:24px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    position:fixed;
+    top:0; left:0;
+    height:100vh;
+}
+
+.sidebar-icon {
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    font-size:24px;
+    border:1px solid rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.15);
+    transition:0.3s;
+}
+.sidebar-icon:hover {
+    background:rgba(255,255,255,0.25);
+    transform:translateY(-2px);
+}
+.sidebar-icon.active {
+    background:linear-gradient(135deg, #ffffff55, #ffffff33);
+    box-shadow:0 8px 26px rgba(102,126,234,0.45);
+}
+
+/* ==========================================
+   MAIN CONTENT  
+========================================== */
+.main-content {
+    flex:1;
+    margin-left:80px;
+    padding:30px;
+}
+.container {
+    max-width:1100px;
+    margin:0 auto;
+}
+
+/* ==========================================
+   HEADER REBUILD  
+========================================== */
+.page-header {
+    background:rgba(255,255,255,0.9);
+    padding:26px 32px;
+    border-radius:24px;
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.35);
+    box-shadow:0 10px 40px rgba(0,0,0,0.12);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:32px;
+}
+
+.header-left {
+    display:flex;
+    gap:18px;
+    align-items:center;
+}
+
+.header-icon {
+    font-size:36px;
+}
+
+.header-text h1 {
+    font-size:24px;
+    font-weight:700;
+    color:#2d3748;
+}
+.header-text p {
+    font-size:14px;
+    color:#64748b;
+    margin-top:-4px;
+}
+
+.profile-area {
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.student-name {
+    font-size:14px;
+    font-weight:500;
+    color:#4a5568;
+}
+
+.logout-btn {
+    background:#f7fafc;
+    border:1px solid #d2d7df;
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:14px;
+    cursor:pointer;
+    transition:0.2s;
+}
+.logout-btn:hover {
+    background:#edf2f7;
+}
+
+/* ==========================================
+   TABS  
+========================================== */
+.tabs {
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+}
+.tab-btn {
+    border:none;
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.35);
+    backdrop-filter:blur(6px);
+    color:#fff;
+    font-weight:500;
+}
+.tab-btn.active {
+    background:#fff;
+    color:#667eea;
+}
+
+/* ==========================================
+   GLASS CARD  
+========================================== */
+.glass-card {
+    background:rgba(255,255,255,0.92);
+    padding:32px;
+    border-radius:24px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    backdrop-filter:blur(14px);
+    margin-bottom:26px;
+}
+
+.card-header {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:20px;
+}
+.card-title {
+    font-size:20px;
+    font-weight:600;
+}
+
+/* ==========================================
+   FORMS  
+========================================== */
+.form-group { margin-bottom:16px; }
+
+.form-label {
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #d4d7e2;
+    font-size:14px;
+}
+
+.form-textarea {
+    min-height:80px;
+    resize:vertical;
+}
+
+.save-btn {
+    border:none;
+    background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding:10px 22px;
+    color:white;
+    border-radius:12px;
+    cursor:pointer;
+    display:inline-flex;
+    gap:6px;
+    align-items:center;
+    font-weight:600;
+}
+
+/* ==========================================
+   LISTS  
+========================================== */
+.question-item,
+.answer-item {
+    background:#f7fafc;
+    border:1px solid #e2e8f0;
+    padding:18px;
+    border-radius:16px;
+    margin-bottom:12px;
+}
+
+.subject-tag {
+    background:#667eea;
+    color:white;
+    padding:3px 10px;
+    border-radius:999px;
+    font-size:11px;
+}
+
+.empty-state {
+    padding:26px;
+    text-align:center;
+    color:#bcc2d1;
+}
+
+/* grading buttons */
+.grade-row {
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+.grade-btn {
+    border:none;
+    padding:6px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+.correct { background:#c6f6d5; color:#22543d; }
+.wrong { background:#fed7d7; color:#9b2c2c; }
+
+</style>
+</head>
+
+<body>
+<div class="app-container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-icon" onclick="location.href='index.html'">📊</div>
+    <div class="sidebar-icon" onclick="location.href='reflections.html'">💭</div>
+    <div class="sidebar-icon active" onclick="location.href='questions.html'">❓</div>
+    <div class="sidebar-icon" onclick="location.href='settings.html'">⚙️</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+<div class="container">
+
+<header class="page-header">
+    <div class="header-left">
+        <div class="header-icon">❓</div>
+        <div class="header-text">
+            <h1>Question Bank</h1>
+            <p>Create, answer & grade questions.</p>
         </div>
-      </main>
     </div>
+
+    <div class="profile-area">
+        <img id="csAvatar" src="" style="width:34px;height:34px;border-radius:50%;object-fit:cover;display:none;border:2px solid #edf2f7;">
+        <div class="student-name" id="studentName">Student</div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+    <button class="tab-btn active" data-tab="add">Add Question</button>
+    <button class="tab-btn" data-tab="answer">Answer Questions</button>
+    <button class="tab-btn" data-tab="grade">Grade Answers</button>
+</div>
+
+<!-- ADD QUESTION TAB -->
+<div class="glass-card" id="tab-add">
+    <div class="card-header"><span>➕</span><span class="card-title">Add a Question</span></div>
+
+    <form id="questionForm">
+        <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-select" id="subjectSelect" required>
+                <option value="">Loading subjects...</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Question</label>
+            <textarea id="questionText" class="form-textarea" required></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Suggested Answer (optional)</label>
+            <textarea id="suggestedAnswer" class="form-textarea"></textarea>
+        </div>
+        <button type="submit" class="save-btn">💾 Save Question</button>
+    </form>
+
+    <hr style="margin:24px 0;border:none;border-top:1px solid #eee;">
+
+    <h3>Your Questions</h3>
+    <div id="questionsList"></div>
+</div>
+
+<!-- ANSWER TAB -->
+<div class="glass-card" id="tab-answer" style="display:none;">
+    <div class="card-header"><span>🖊️</span><span class="card-title">Answer a Question</span></div>
+
+    <div class="form-group">
+        <label class="form-label">Filter by Subject</label>
+        <select class="form-select" id="answerSubjectSelect">
+            <option value="">All subjects</option>
+        </select>
+    </div>
+
+    <div id="answerQuestionsList"></div>
+
+    <div id="answerFormContainer" style="margin-top:20px;display:none;">
+        <h4>Write your answer</h4>
+        <textarea id="studentAnswerText" class="form-textarea"></textarea>
+        <button id="submitAnswerBtn" class="save-btn" style="margin-top:12px;">Submit</button>
+    </div>
+</div>
+
+<!-- GRADE TAB -->
+<div class="glass-card" id="tab-grade" style="display:none;">
+    <div class="card-header"><span>✅</span><span class="card-title">Grade Answers</span></div>
+    <p style="color:#64748b;font-size:13px;margin-top:-6px;">
+        These are answers submitted by students in this question bank.
+    </p>
+    <div id="answersToGrade"></div>
+</div>
+
+</div>
+</main>
+
+</div>
 
     <script>
       // === Backend base URL ===
