@@ -640,6 +640,42 @@
   transition: width 0.3s ease;
 }
 
+.page-header {
+  background: white;
+  border-radius: 16px;
+  padding: 22px 30px;
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* THIS is what aligns both sides */
+  gap: 20px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #edf2f7;
+  object-fit: cover;
+  display: none; /* auto-show when user has avatar */
+}
+
+
 
 
 
@@ -826,13 +862,27 @@
       <main class="main-content">
         <div class="container">
           <!-- header -->
-          <header class="page-header">
-  <div class="header-icon">📊</div>
-  <div class="header-text">
-    <h1>Dashboard</h1>
-    <p>Your study journey so far — ready to boost it?</p>
+         <header class="page-header">
+  <div class="header-left">
+    <div class="header-icon">📊</div>
+    <div class="header-text">
+      <h1>Dashboard</h1>
+      <p>Your study journey so far — ready to boost it?</p>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <img
+      id="csAvatar"
+      src=""
+      alt="avatar"
+      class="header-avatar"
+    />
+    <div class="student-name" id="studentName">Student</div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
   </div>
 </header>
+
 
 
           <!-- progress -->
