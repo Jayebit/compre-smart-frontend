@@ -621,6 +621,7 @@ body {
           });
           const created = await res.json();
           questionsData.unshift(created);
+          addExp(20); // EXP for posting question
           questionForm.reset();
           renderQuestionsList();
           renderAnswerQuestions();
@@ -711,6 +712,7 @@ body {
           });
           const created = await res.json();
           answersData.unshift(created);
+          addExp(20); // EXP for answering
           studentAnswerText.value = "";
           answerFormContainer.style.display = "none";
           renderAnswersToGrade();
@@ -832,6 +834,8 @@ body {
                 wrongBtn.textContent = "Incorrect";
 
                 correctBtn.addEventListener("click", () => submitGrade(ans, true, feedbackInput.value));
+                addExp(50); // EXP for getting correct
+
                 wrongBtn.addEventListener("click", () => submitGrade(ans, false, feedbackInput.value));
 
                 gradeRow.appendChild(feedbackInput);
@@ -894,6 +898,22 @@ async function submitGrade(ans, isCorrect, feedback) {
         renderAnswersToGrade();
         showMyAnswerStatus();
       })();
+
+      async function addExp(amount) {
+    try {
+        await fetch(API_BASE + "/exp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                user,
+                amount
+            })
+        });
+    } catch (err) {
+        console.error("EXP error:", err);
+    }
+}
+
     </script>
 
     <script>

@@ -1214,16 +1214,31 @@
 
 async function loadXP() {
   try {
-    const res = await fetch(`${API_BASE}/user/${user}`);
+    const res = await fetch(`${API_BASE}/exp/${user}`);
     const data = await res.json();
 
-    if (data && data.xp !== undefined) {
-      document.getElementById("xpValue").textContent = data.xp;
-    }
+    const xp = data.total || 0;
+
+    // LEVEL SYSTEM
+    const level = Math.floor(xp / 100) + 1;
+    const needed = level * 100;
+
+    // UPDATE UI
+    document.getElementById("xpValue").textContent = xp;
+    document.getElementById("xpText").textContent = `${xp} / ${needed} XP`;
+    document.getElementById("xpLevel").textContent = `Level ${level}`;
+
+    // PROGRESS BAR FILL
+    const progressPercent = Math.min((xp % 100) / 100 * 100, 100);
+    document.getElementById("xpBar").style.width = progressPercent + "%";
+
   } catch (err) {
-    console.error("Failed to load XP", err);
+    console.error("XP Load Error:", err);
   }
 }
+
+loadXP();
+
 
 
 
@@ -1339,22 +1354,26 @@ async function loadXP() {
 
       // Load XP + Level
 async function loadXP() {
-  const res = await fetch(`${API_BASE}/xp?username=${user}`);
+  const res = await fetch(`${API_BASE}/exp/${user}`);
   const data = await res.json();
 
-  const xp = data.xp || 0;
+  const xp = data.total || 0;
+
+  // LEVEL SYSTEM
   const level = Math.floor(xp / 100) + 1;
-  const needed = (level * 100);
+  const needed = level * 100;
 
   document.getElementById("xpValue").textContent = xp;
   document.getElementById("xpText").textContent = `${xp} / ${needed} XP`;
   document.getElementById("xpLevel").textContent = `Level ${level}`;
 
   const progressPercent = Math.min((xp % 100) / 100 * 100, 100);
+
   document.getElementById("xpBar").style.width = progressPercent + "%";
 }
 
 loadXP();
+
 
 
       function ensureResourcesModal() {
