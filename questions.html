@@ -715,11 +715,53 @@ body {
           answerFormContainer.style.display = "none";
           renderAnswersToGrade();
           alert("Answer submitted!");
+          showMyAnswerStatus();
+
         } catch (err) {
           console.error(err);
           alert("Could not submit answer.");
         }
       });
+
+      function showMyAnswerStatus() {
+    const myAnswers = answersData.filter(a => a.answeredBy === user);
+
+    myAnswers.forEach(ans => {
+        const grade = gradesData.find(g => g.answerId === ans.id);
+        const q = questionsData.find(q => q.id === ans.questionId);
+
+        // find the question block in the Answer tab
+        const questionBlocks = document.querySelectorAll(".question-item");
+        questionBlocks.forEach(block => {
+            if (block.innerText.includes(q.text)) {
+
+                // Add grade display if not added yet
+                if (!block.querySelector(".my-grade-status")) {
+                    const status = document.createElement("div");
+                    status.className = "my-grade-status";
+                    status.style.marginTop = "10px";
+                    status.style.fontSize = "13px";
+
+                    if (grade) {
+                        status.style.color = grade.isCorrect ? "#22543d" : "#9b2c2c";
+                        status.textContent = 
+                          "Your Answer: " + ans.answerText +
+                          " | Grade: " + (grade.isCorrect ? "Correct" : "Incorrect") +
+                          (grade.feedback ? " — Feedback: " + grade.feedback : "");
+                    } else {
+                        status.style.color = "#718096";
+                        status.textContent = 
+                          "You answered: " + ans.answerText + 
+                          " — Waiting for grade...";
+                    }
+
+                    block.appendChild(status);
+                }
+            }
+        });
+    });
+}
+
 
       // ===== tab: Grade Answers =====
       const answersToGradeEl = document.getElementById("answersToGrade");
@@ -850,6 +892,7 @@ async function submitGrade(ans, isCorrect, feedback) {
         renderQuestionsList();
         renderAnswerQuestions();
         renderAnswersToGrade();
+        showMyAnswerStatus();
       })();
     </script>
 
