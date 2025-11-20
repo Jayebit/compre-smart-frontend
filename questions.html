@@ -725,24 +725,30 @@ body {
       const answersToGradeEl = document.getElementById("answersToGrade");
 
       function renderAnswersToGrade() {
-        const answers = answersData;
-        const questions = questionsData;
-        const grades = gradesData;
+    const answers = answersData;
+    const questions = questionsData;
+    const grades = gradesData;
 
-        answersToGradeEl.innerHTML = "";
-        if (!answers.length) {
-          answersToGradeEl.innerHTML =
-            '<div class="empty-state">No answers submitted yet.</div>';
-          return;
-        }
+    answersToGradeEl.innerHTML = "";
 
-        answers
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() -
-              new Date(a.createdAt).getTime()
-          )
-          .forEach((ans) => {
+    const myAnswersToGrade = answers.filter(ans => {
+        const q = questions.find(q => q.id === ans.questionId);
+        return q && q.createdBy === user;  // ONLY SHOW YOUR QUESTIONS
+    });
+
+    if (!myAnswersToGrade.length) {
+        answersToGradeEl.innerHTML =
+            '<div class="empty-state">No answers to grade — only answer submissions for your questions will appear here.</div>';
+        return;
+    }
+
+    myAnswersToGrade
+        .sort((a, b) =>
+            new Date(b.createdAt).getTime() -
+            new Date(a.createdAt).getTime()
+        )
+        .forEach((ans) => {
+
             const q = questions.find((qq) => qq.id === ans.questionId);
             const card = document.createElement("div");
             card.className = "answer-item";
@@ -764,89 +770,75 @@ body {
             card.appendChild(ansText);
 
             const existing = grades.find((g) => g.answerId === ans.id);
-            const gradeRow = document.createElement("div");
-            gradeRow.className = "grade-row";
 
-            const feedbackInput = document.createElement("input");
-            feedbackInput.className = "form-input";
-            feedbackInput.placeholder = "Feedback (optional)";
-            feedbackInput.value = existing ? existing.feedback : "";
+            // grading UI — only visible if the logged-in user owns the question
+            if (q.createdBy === user) {
+                const gradeRow = document.createElement("div");
+                gradeRow.className = "grade-row";
 
-            const correctBtn = document.createElement("button");
-            correctBtn.className = "grade-btn correct";
-            correctBtn.textContent = "Correct";
+                const feedbackInput = document.createElement("input");
+                feedbackInput.className = "form-input";
+                feedbackInput.placeholder = "Feedback (optional)";
+                feedbackInput.value = existing ? existing.feedback : "";
 
-            const wrongBtn = document.createElement("button");
-            wrongBtn.className = "grade-btn wrong";
-            wrongBtn.textContent = "Incorrect";
+                const correctBtn = document.createElement("button");
+                correctBtn.className = "grade-btn correct";
+                correctBtn.textContent = "Correct";
 
-            correctBtn.addEventListener("click", async () => {
-              const payload = {
-                answerId: ans.id,
-                questionId: ans.questionId,
-                isCorrect: true,
-                feedback: feedbackInput.value,
-                gradedBy: user,
-              };
-              try {
-                await fetch(API_BASE + "/grades", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(payload),
-                });
-                await fetchGrades();
-                renderAnswersToGrade();
-                alert("Graded as correct.");
-              } catch (err) {
-                console.error(err);
-                alert("Could not grade answer.");
-              }
-            });
+                const wrongBtn = document.createElement("button");
+                wrongBtn.className = "grade-btn wrong";
+                wrongBtn.textContent = "Incorrect";
 
-            wrongBtn.addEventListener("click", async () => {
-              const payload = {
-                answerId: ans.id,
-                questionId: ans.questionId,
-                isCorrect: false,
-                feedback: feedbackInput.value,
-                gradedBy: user,
-              };
-              try {
-                await fetch(API_BASE + "/grades", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(payload),
-                });
-                await fetchGrades();
-                renderAnswersToGrade();
-                alert("Graded as incorrect.");
-              } catch (err) {
-                console.error(err);
-                alert("Could not grade answer.");
-              }
-            });
+                correctBtn.addEventListener("click", () => submitGrade(ans, true, feedbackInput.value));
+                wrongBtn.addEventListener("click", () => submitGrade(ans, false, feedbackInput.value));
 
-            gradeRow.appendChild(feedbackInput);
-            gradeRow.appendChild(correctBtn);
-            gradeRow.appendChild(wrongBtn);
+                gradeRow.appendChild(feedbackInput);
+                gradeRow.appendChild(correctBtn);
+                gradeRow.appendChild(wrongBtn);
 
-            card.appendChild(gradeRow);
+                card.appendChild(gradeRow);
+            }
 
             if (existing) {
-              const status = document.createElement("div");
-              status.style.marginTop = "4px";
-              status.style.fontSize = "12px";
-              status.style.color = existing.isCorrect ? "#22543d" : "#9b2c2c";
-              status.textContent =
-                "Already graded as " +
-                (existing.isCorrect ? "Correct" : "Incorrect") +
-                (existing.feedback ? " — " + existing.feedback : "");
-              card.appendChild(status);
+                const status = document.createElement("div");
+                status.style.marginTop = "4px";
+                status.style.fontSize = "12px";
+                status.style.color = existing.isCorrect ? "#22543d" : "#9b2c2c";
+                status.textContent =
+                    "Graded as " +
+                    (existing.isCorrect ? "Correct" : "Incorrect") +
+                    (existing.feedback ? " — " + existing.feedback : "");
+                card.appendChild(status);
             }
 
             answersToGradeEl.appendChild(card);
-          });
-      }
+        });
+}
+
+async function submitGrade(ans, isCorrect, feedback) {
+    const payload = {
+        answerId: ans.id,
+        questionId: ans.questionId,
+        isCorrect,
+        feedback,
+        gradedBy: user
+    };
+
+    try {
+        await fetch(API_BASE + "/grades", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        await fetchGrades();
+        renderAnswersToGrade();
+        alert("Grade submitted.");
+    } catch (err) {
+        console.error(err);
+        alert("Could not submit grade.");
+    }
+}
+
 
       // initial load from backend then render
       (async () => {
