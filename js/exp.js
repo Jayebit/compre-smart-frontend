@@ -3,6 +3,14 @@ const API = window.API_BASE;
 const USER = window.USER;
 
 // =============================
+// XP needed for next level
+// Match backend formula
+// =============================
+function xpNeededFor(level) {
+  return 50 + (level * 25);  // L1→2 = 75, L2→3 = 100, L3→4 = 125
+}
+
+// =============================
 // ADD XP
 // =============================
 async function addExp(amount) {
@@ -45,7 +53,12 @@ async function loadXP() {
 
     const xp = data.xp || 0;
     const level = data.level || 1;
-    const progress = xp % 100;
+
+    // XP required for current level → next level
+    const needed = xpNeededFor(level);
+
+    // Progress percentage
+    const progressPercent = Math.min(100, Math.floor((xp / needed) * 100));
 
     const xpValue = document.getElementById("xpValue");
     const xpText = document.getElementById("xpText");
@@ -53,9 +66,9 @@ async function loadXP() {
     const xpBar = document.getElementById("xpBar");
 
     if (xpValue) xpValue.textContent = xp;
-    if (xpText) xpText.textContent = `${progress} / 100 XP`;
+    if (xpText) xpText.textContent = `${xp} / ${needed} XP`;
     if (xpLevel) xpLevel.textContent = `Level ${level}`;
-    if (xpBar) xpBar.style.width = `${progress}%`;
+    if (xpBar) xpBar.style.width = `${progressPercent}%`;
 
   } catch (err) {
     console.error("Load XP error:", err);
