@@ -1354,25 +1354,25 @@ loadXP();
 
       // Load XP + Level
 async function loadXP() {
-  const res = await fetch(`${API_BASE}/exp/${user}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API}/exp/${user}`);
+    const data = await res.json();
 
-  const xp = data.total || 0;
+    const xp = data.xp || 0;
+    const level = Math.floor(xp / 100) + 1;
+    const progress = xp % 100;
 
-  // LEVEL SYSTEM
-  const level = Math.floor(xp / 100) + 1;
-  const needed = level * 100;
+    document.getElementById("xpValue").innerText = xp;
+    document.getElementById("xpText").innerText = `${progress} / 100 XP`;
+    document.getElementById("xpLevel").innerText = `Level ${level}`;
+    document.getElementById("xpBar").style.width = `${progress}%`;
 
-  document.getElementById("xpValue").textContent = xp;
-  document.getElementById("xpText").textContent = `${xp} / ${needed} XP`;
-  document.getElementById("xpLevel").textContent = `Level ${level}`;
-
-  const progressPercent = Math.min((xp % 100) / 100 * 100, 100);
-
-  document.getElementById("xpBar").style.width = progressPercent + "%";
+  } catch (e) {
+    console.error("Load XP error", e);
+  }
 }
 
-loadXP();
+document.addEventListener("DOMContentLoaded", loadXP);
 
 
 
