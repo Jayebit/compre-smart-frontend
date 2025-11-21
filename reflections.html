@@ -349,6 +349,8 @@
   </main>
 </div>
 
+<script src="js/exp.js"></script>
+
 <!-- JS BACKEND LOGIC -->
 <script>
 const API = "https://compre-smart-backend-1.onrender.com";
@@ -494,7 +496,12 @@ function calculateStreak(list) {
 // Delete
 async function deleteReflection(id) {
   if (!confirm("Delete this reflection?")) return;
-  await fetch(`${API}/reflections/${id}`, { method: "DELETE" });
+  await fetch(`${API}/reflections/delete`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ id })
+});
+
   loadReflections();
 }
 
@@ -503,7 +510,7 @@ document.addEventListener("DOMContentLoaded", loadReflections);
 
 
 </script> 
-<script src="js/exp.js"></script>
+
 
 
 </body>
