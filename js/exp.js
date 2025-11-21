@@ -1,5 +1,4 @@
 const API_BASE = "https://compre-smart-backend-1.onrender.com";
-const USER = localStorage.getItem("cs_user");
 
 // =============================
 // ADD XP
@@ -10,7 +9,7 @@ async function addExp(amount) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: USER,
+        username: window.USER,
         amount
       })
     });
@@ -29,7 +28,7 @@ async function addExp(amount) {
 // =============================
 async function loadXP() {
   try {
-    const res = await fetch(`${API_BASE}/xp?username=${USER}`);
+    const res = await fetch(`${API_BASE}/xp?username=${window.USER}`);
     const data = await res.json();
 
     const xp = data.xp || 0;
