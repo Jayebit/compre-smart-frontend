@@ -914,6 +914,34 @@ async function submitGrade(ans, isCorrect, feedback) {
     }
 }
 
+// exp add
+async function addExp(amount) {
+  try {
+    const res = await fetch(`${API_BASE || API}/exp/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: localStorage.getItem("cs_user"),
+        amount
+      })
+    });
+
+    if (!res.ok) {
+      console.error("Failed to add XP");
+      return;
+    }
+
+    // Optional: If you want live updating on dashboard
+    if (typeof loadXP === "function") {
+      loadXP();
+    }
+
+  } catch (err) {
+    console.error("Add EXP Error:", err);
+  }
+}
+
+
     </script>
 
     <script>
