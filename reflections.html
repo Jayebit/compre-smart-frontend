@@ -358,13 +358,13 @@
 
 <!-- JS BACKEND LOGIC -->
 <script>
-const API = "https://compre-smart-backend-1.onrender.com";
+const API = window.API_BASE;
+window.USER = window.USER || localStorage.getItem("cs_user");
 
 if (!window.USER) {
-  window.USER = localStorage.getItem("cs_user");
+  window.location.href = "login.html";
 }
 
-if (!USER) window.location.href = "login.html";
 
 
 let selectedMood = "";
