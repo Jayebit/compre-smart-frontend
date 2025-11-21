@@ -1,15 +1,22 @@
-const API_BASE = "https://compre-smart-backend-1.onrender.com";
+// Use the API and USER passed from index.html
+const API = window.API_BASE;
+const USER = window.USER;
 
 // =============================
 // ADD XP
 // =============================
 async function addExp(amount) {
   try {
-    await fetch(`${API_BASE}/xp/add`, {
+    if (!USER) {
+      console.warn("No USER found. Cannot add XP.");
+      return;
+    }
+
+    await fetch(`${API}/xp/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: window.USER,
+        username: USER,
         amount
       })
     });
@@ -28,7 +35,12 @@ async function addExp(amount) {
 // =============================
 async function loadXP() {
   try {
-    const res = await fetch(`${API_BASE}/xp?username=${window.USER}`);
+    if (!USER) {
+      console.warn("No USER found. Cannot load XP.");
+      return;
+    }
+
+    const res = await fetch(`${API}/xp?username=${USER}`);
     const data = await res.json();
 
     const xp = data.xp || 0;
@@ -50,6 +62,7 @@ async function loadXP() {
   }
 }
 
+// Load automatically when dashboard loaded
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("xpBar")) {
     loadXP();
