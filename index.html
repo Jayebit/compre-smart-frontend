@@ -1212,36 +1212,6 @@
   document.getElementById("totalReflections").textContent = list.length;
 }
 
-async function loadXP() {
-  try {
-    const res = await fetch(`${API_BASE}/exp/${user}`);
-    const data = await res.json();
-
-    const xp = data.total || 0;
-
-    // LEVEL SYSTEM
-    const level = Math.floor(xp / 100) + 1;
-    const needed = level * 100;
-
-    // UPDATE UI
-    document.getElementById("xpValue").textContent = xp;
-    document.getElementById("xpText").textContent = `${xp} / ${needed} XP`;
-    document.getElementById("xpLevel").textContent = `Level ${level}`;
-
-    // PROGRESS BAR FILL
-    const progressPercent = Math.min((xp % 100) / 100 * 100, 100);
-    document.getElementById("xpBar").style.width = progressPercent + "%";
-
-  } catch (err) {
-    console.error("XP Load Error:", err);
-  }
-}
-
-loadXP();
-
-
-
-
       // logout
       document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.removeItem("cs_user");
@@ -1351,30 +1321,6 @@ loadXP();
           card.querySelector(".subject-header").appendChild(btn);
         });
       });
-
-      // Load XP + Level
-async function loadXP() {
-  try {
-    const res = await fetch(`${API}/exp/${user}`);
-    const data = await res.json();
-
-    const xp = data.xp || 0;
-    const level = Math.floor(xp / 100) + 1;
-    const progress = xp % 100;
-
-    document.getElementById("xpValue").innerText = xp;
-    document.getElementById("xpText").innerText = `${progress} / 100 XP`;
-    document.getElementById("xpLevel").innerText = `Level ${level}`;
-    document.getElementById("xpBar").style.width = `${progress}%`;
-
-  } catch (e) {
-    console.error("Load XP error", e);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", loadXP);
-
-
 
       function ensureResourcesModal() {
         if (document.getElementById("cs-resources-modal")) return;
